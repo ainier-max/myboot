@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_centre'>
+    <!-- 查询页面树 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT page_id,page_name,page_tree_id,page_img,page_model FROM page_centre where 1=1
+        <if test="page_tree_id!=null and page_tree_id!=''">
+            and page_tree_id=#{page_tree_id,jdbcType=INTEGER};
+        </if>
+        <if test="page_id!=null and page_id!=''">
+            and page_id=#{page_id,jdbcType=INTEGER};
+        </if>
+
+    </select>
+
+
+    <insert id="insert" parameterType="java.util.HashMap">
+        <!-- 子查询定义变量 -->
+        select @myid := (select max(page_id)+1 from page_centre);
+
+        INSERT INTO page_block_tree(page_id,name,page_block_ref,page_block_config_str,page_block_blue_script_config_str) VALUES
+        (@myid,#{page_name,jdbcType=VARCHAR},#{page_block_ref,jdbcType=VARCHAR},
+        #{page_block_config_str,jdbcType=VARCHAR},#{page_block_blue_script_config_str,jdbcType=VARCHAR});
+
+        INSERT INTO page_centre(page_id,page_name,page_tree_id,page_img) VALUES
+        (@myid,#{page_name,jdbcType=VARCHAR},#{page_tree_id,jdbcType=VARCHAR},#{page_img,jdbcType=VARCHAR});
+
+
+    </insert>
+
+
+    <!-- 更新组件代码与配置 -->
+    <update id="updatePageConfig" parameterType="java.util.HashMap">
+        UPDATE page_block_tree SET page_block_config_str=#{page_block_config_str,jdbcType=BLOB},name=#{name,jdbcType=VARCHAR}
+        WHERE page_block_ref=#{page_block_ref,jdbcType=VARCHAR};
+        UPDATE page_centre SET page_img=#{page_img,jdbcType=VARCHAR}
+        WHERE page_id=#{page_id,jdbcType=VARCHAR};
+    </update>
+
+    <!-- 删除数据 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        DELETE FROM page_centre WHERE page_id=#{page_id,jdbcType=INTEGER};
+        DELETE FROM page_block_tree WHERE page_id=#{page_id,jdbcType=INTEGER};
+        DELETE FROM page_block_layout WHERE page_id=#{page_id,jdbcType=INTEGER};
+        DELETE FROM page_block_component WHERE page_id=#{page_id,jdbcType=INTEGER};
+    </delete>
+
+</mapper>

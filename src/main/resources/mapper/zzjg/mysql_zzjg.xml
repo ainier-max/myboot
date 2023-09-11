@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='mysql_zzjg'>
+		<!--查看某个区域信息-->
+		<select id="zzjg_info" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	 			SELECT id,name,pid,lng,lat,zbc FROM gis_zzjg WHERE id=#{id,jdbcType=VARCHAR}
+	  	</select>
+		<!--组织机构树-->
+	    <select id="zzjg_tree" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	 		SELECT id,name,pid,lng,lat FROM gis_zzjg WHERE FIND_IN_SET(id, queryChildrenAreaInfo(#{id,jdbcType=VARCHAR}));
+	  	</select>
+		<!--获取所属的子组织机构-->
+		<select id="zzjg_child" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	 		SELECT id,name,pid,lng,lat FROM gis_zzjg WHERE pid=#{pid,jdbcType=VARCHAR}
+	  	</select>
+
+</mapper>
+<!-- mysql 递归查询函数
+DELIMITER $$
+CREATE
+    /*[DEFINER = { user | CURRENT_USER }]*/
+    FUNCTION queryChildrenAreaInfo (areaId INT)
+	RETURNS VARCHAR(4000)
+	BEGIN
+	DECLARE sTemp VARCHAR(4000);
+	DECLARE sTempChd VARCHAR(4000);
+
+	SET sTemp = '$';
+	SET sTempChd = CAST(areaId AS CHAR);
+
+	WHILE sTempChd IS NOT NULL DO
+	SET sTemp = CONCAT(sTemp,',',sTempChd);
+	SELECT GROUP_CONCAT(id) INTO sTempChd FROM gis_zzjg WHERE FIND_IN_SET(pid,sTempChd)>0;
+	END WHILE;
+	RETURN sTemp;
+    END$$
+DELIMITER ;
+
+调用方法：
+SELECT * FROM gather_tree WHERE FIND_IN_SET(id, queryChildrenAreaInfo(2)); 
+ -->

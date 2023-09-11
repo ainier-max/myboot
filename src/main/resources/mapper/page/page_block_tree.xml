@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_block_tree'>
+    <!-- 查询组件树 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT t.id,t.name,t.pid,t.page_block_ref,t.page_block_config_str,t.page_block_blue_script_config_str,t.page_id,t1.page_img
+        FROM page_block_tree t left join page_centre t1 on t.page_id=t1.page_id where t.page_id=#{page_id,jdbcType=VARCHAR}
+
+    </select>
+
+
+    <!-- 插入页面块属性 -->
+    <update id="insertPageBlock" parameterType="java.util.HashMap">
+        INSERT INTO page_block_tree(name,pid,page_block_ref,page_block_config_str,page_block_blue_script_config_str,page_id) VALUES
+       (
+           #{name,jdbcType=VARCHAR},
+           #{pid,jdbcType=INTEGER},
+           #{page_block_ref,jdbcType=INTEGER},
+           #{page_block_config_str,jdbcType=BLOB},
+           #{page_block_blue_script_config_str,jdbcType=BLOB},
+           #{page_id,jdbcType=INTEGER}
+       )
+    </update>
+
+    <!-- 更新页面块属性 -->
+    <update id="updatePageBlockConfig" parameterType="java.util.HashMap">
+        UPDATE page_block_tree SET name=#{name,jdbcType=VARCHAR},page_block_config_str=#{page_block_config_str,jdbcType=BLOB} WHERE id=#{id,jdbcType=INTEGER};
+    </update>
+
+    <!-- 删除数据 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        DELETE FROM page_block_tree WHERE page_block_ref=#{page_block_ref,jdbcType=VARCHAR};
+    </delete>
+
+    <!-- 更新组件代码与配置 -->
+    <update id="updatePageBlueScriptConfig" parameterType="java.util.HashMap">
+        UPDATE page_block_tree SET page_block_blue_script_config_str=#{page_block_blue_script_config_str,jdbcType=BLOB}
+        WHERE page_block_ref=#{page_block_ref,jdbcType=VARCHAR};
+    </update>
+
+
+
+</mapper>

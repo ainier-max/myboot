@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration  
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>  
+	<!-- 全局配置参数，需要时再使用 -->
+	<settings>
+		<!-- mybatis返回map类型数据空值字段不显示；默认为false，则空值会设置为null。设置为true，则空值会设置为空字符串""-->
+		<setting name="callSettersOnNulls" value="true"/>
+		<!-- 开启二级缓存 -->
+		<setting name="cacheEnabled" value="true"/>
+		<!-- 延迟加载总开关 -->
+        <setting name="lazyLoadingEnabled" value="true" />
+        <!-- 禁止积极主动的加载,提高性能 -->
+        <setting name="aggressiveLazyLoading" value="false" />
+        <!-- 控制台打印SQL语句(屏蔽即不打印SQL语句)-->
+		<setting name="logImpl" value="STDOUT_LOGGING" />
+	</settings>
+	
+</configuration>  

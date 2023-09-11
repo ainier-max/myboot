@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_data_model_tree'>
+    <!-- 查询组件树 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select id,name,pid,data_model_id from page_data_model_tree
+    </select>
+
+
+
+
+</mapper>

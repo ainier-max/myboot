@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+namespace命名空间，作用就是sql进行分类化管理，理解sql隔离
+注意：使用mapper代理开发，namespace有特殊重要的作用
+namespace,也是ehcache的缓存文件名字
+<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+ 添加这个节点会默认将该namespace下所有的的select语句缓存。如果不需要进行缓存，需要设置useCache="false"。
+ 使用注意点
+ (1)该条SQL语句常用，才开启缓存
+ (1)建议单表查询缓存，如关联查询，其关联表最好不要有增，删，改的业务逻辑
+ -->
+<mapper namespace='mysql_user_ehcache'>
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+	<select id="findUser" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="true">
+		SELECT * FROM gis_user WHERE 1=1
+		<if test="username!=null and username!=''">
+			and username =#{username, jdbcType=VARCHAR}
+		</if>
+		<if test="ids!=null">
+			<foreach collection="ids" item="id" open="AND id in (" close=")" separator=",">
+				<!-- 每次遍历需要拼接的串 -->
+				#{id,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+	</select>
+</mapper>

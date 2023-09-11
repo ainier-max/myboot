@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='gather_layer'>
+    <!-- 插入 -->
+    <insert id="insert" parameterType="java.util.HashMap" >
+        <if test="gather_type=='point'">
+            INSERT INTO ${table_name}(GATHER_ZXZT,GATHER_ZBX,GATHER_ZBY,GATHER_CJR,GATHER_CJSJ,GATHER_CJJQ,
+        </if>
+        <if test="gather_type=='polyline' or gather_type=='polygon'">
+            INSERT INTO ${table_name}(GATHER_ZXZT,GATHER_ZBC,GATHER_CJR,GATHER_CJSJ,GATHER_CJJQ,
+        </if>
+        <if test="gather_type=='absence'">
+            INSERT INTO ${table_name}(GATHER_ZXZT,GATHER_CJR,GATHER_CJSJ,GATHER_CJJQ,
+        </if>
+        <if test="keys!=null  and keys.size>0 ">
+            <foreach collection="keys" item="key" open="" close="" separator=",">
+                <!-- 每次遍历需要拼接的串 -->
+                ${key}
+            </foreach>
+        </if>
+        )
+
+        <if test="gather_type=='point'">
+            VALUES ('0',#{gather_zbx,jdbcType=VARCHAR},#{gather_zby,jdbcType=VARCHAR},#{gather_cjr,jdbcType=VARCHAR},NOW(),#{gather_cjjq,jdbcType=VARCHAR},
+        </if>
+
+        <if test="gather_type=='polyline' or gather_type=='polygon'">
+            VALUES ('0',#{gather_zbc,jdbcType=VARCHAR},#{gather_cjr,jdbcType=VARCHAR},NOW(),#{gather_cjjq,jdbcType=VARCHAR},
+        </if>
+
+        <if test="gather_type=='absence'">
+            VALUES ('0',#{gather_cjr,jdbcType=VARCHAR},NOW(),#{gather_cjjq,jdbcType=VARCHAR},
+        </if>
+
+
+        <if test="values!=null  and values.size>0 ">
+            <foreach collection="values" item="value" open="" close="" separator=",">
+                <!-- 每次遍历需要拼接的串 -->
+                #{value,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        )
+    </insert>
+
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select ${fieldStr} from ${layer_name} t where 1=1
+        <if test="gather_id!=null and gather_id!=''">
+            AND t.GATHER_ID=#{gather_id,jdbcType=INTEGER}
+        </if>
+        <if test="minx!=null and minx!=''">
+            AND gather_zbx&gt;=#{minx} AND gather_zbx&lt;=#{maxx} AND gather_zby&gt;=#{miny} AND gather_zby&lt;=#{maxy}
+        </if>
+        <if test="objects!=null and objects!=''">
+            <foreach collection="objects" item="item" >
+                <if test="item.type=='文字'">
+                    <if test="item.value!='' and item.value!=null">
+                        AND instr(${item.field},#{item.value})&gt;0
+                    </if>
+                </if>
+
+                <if test="item.type=='下拉框'">
+                    <if test="item.value!='' and item.value!=null">
+                        AND ${item.field}=#{item.value}
+                    </if>
+                </if>
+
+                <if test="item.type=='时间'">
+                    <if test="item.start_time!='' and item.start_time!=null">
+                        AND ${item.field} BETWEEN #{item.start_time} AND #{item.end_time}
+                    </if>
+                </if>
+
+
+            </foreach>
+        </if>
+        AND GATHER_ZXZT='0'
+        ORDER BY IFNULL(GATHER_GXSJ,GATHER_CJSJ) DESC
+        <if test="pageSize!=null and pageSize!=''">
+            limit ${start},${pageSize}
+        </if>
+
+
+    </select>
+
+
+    <update id="update" parameterType="java.util.HashMap" >
+        <if test="gather_type=='point'">
+            UPDATE ${table_name} SET GATHER_ZBX=#{gather_zbx,jdbcType=VARCHAR},GATHER_ZBY=#{gather_zby,jdbcType=VARCHAR},
+        </if>
+        <if test="gather_type=='polyline' or gather_type=='polygon'">
+            UPDATE ${table_name} SET GATHER_ZBC=#{gather_zbc,jdbcType=VARCHAR},
+        </if>
+        <if test="gather_type=='absence'">
+            UPDATE ${table_name} SET
+        </if>
+        GATHER_GXRY=#{gather_cjr,jdbcType=VARCHAR},GATHER_GXSJ=NOW(),
+
+        <if test="key_values!=null  and key_values.size>0 ">
+            <foreach collection="key_values" item="key_value" open="" close="" separator=",">
+                <!-- 每次遍历需要拼接的串 -->
+                ${key_value}
+            </foreach>
+        </if>
+        WHERE GATHER_ID=#{gather_id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

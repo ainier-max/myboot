@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_test_web'>
+
+
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t1.id,t1.page_name ,t1.page_url ,t1.type,t2.userid  from page_test_web t1 left join page_test_web_user t2 on t1.id=t2.webid where 1=1
+        <if test="userid!=null and userid!=''">
+            and userid=#{userid, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="java.util.HashMap">
+        <!-- 能获取主键 -->
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+            SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME='page_test_web';
+        </selectKey>
+
+        insert into page_test_web(id,page_name,page_url,type) VALUES
+            (#{id,jdbcType=INTEGER},#{page_name,jdbcType=VARCHAR},#{page_url,jdbcType=VARCHAR},'custom');
+        insert into page_test_web_user(webid,userid) VALUES
+        (#{id,jdbcType=INTEGER},#{userid,jdbcType=VARCHAR});
+
+    </insert>
+
+
+
+    <update id="update" parameterType="java.util.HashMap">
+        UPDATE page_test_web SET page_name=#{page_name,jdbcType=VARCHAR},page_url=#{page_url,jdbcType=VARCHAR}
+        WHERE id=#{id,jdbcType=INTEGER};
+    </update>
+
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from page_test_web_user WHERE webid=#{id,jdbcType=INTEGER} and userid=#{userid,jdbcType=INTEGER};
+
+        <if test="type=='custom'">
+            delete from page_test_web WHERE id=#{id,jdbcType=INTEGER}
+        </if>
+
+    </delete>
+
+    <select id="findChecked" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t3.id,t3.page_name,t3.page_url,IF(userid is null,'false','true') as checked  from (
+              select t1.id ,t1.page_name ,t1.page_url,t2.userid from page_test_web t1
+                  left join (select webid,userid from page_test_web_user where  userid=#{userid,jdbcType=VARCHAR}) t2 on t1.id=t2.webid where  t1.type is null
+        ) t3
+    </select>
+
+
+    <insert id="insertWebUser" parameterType="java.util.HashMap">
+        insert into page_test_web_user(webid,userid) VALUES
+        (#{id,jdbcType=INTEGER},#{userid,jdbcType=VARCHAR});
+    </insert>
+
+    <delete id="deleteWebUser" parameterType="java.util.HashMap">
+        delete from page_test_web_user WHERE webid=#{id,jdbcType=INTEGER} and userid=#{userid,jdbcType=INTEGER};
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

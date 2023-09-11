@@ -1,0 +1,1006 @@
+{
+	"info": {
+		"_postman_id": "ad4709d8-28b1-448e-8a7e-8f20bc673ec9",
+		"name": "myboot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "DB findUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"db\":\"db2\",\r\n    \"sql\":\"mysql_user.findUser\",\r\n    \"username\":\"陈斌才\",\r\n    \"ids\":[10,12,14]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/select.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"select.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB findUser(缓存查询)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_user_ehcache.findUser\",\r\n    \"username\":\"陈斌才\",\r\n    \"ids\":[10,12,14]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/select.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"select.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_user.insert\",\r\n    \"id\":\"\",\r\n    \"username\":\"陈斌才\",\r\n    \"userid\":\"cbc\",\r\n    \"type\":\"一般用户\",\r\n    \"phone\":\"18559274808\",\r\n    \"sfzh\":\"35068229909876\",\r\n    \"password\":\"cbc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/excute.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"excute.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB insertMany",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sql\":\"mysql_user.insertMany\",\n    \"objects\":[\n    \t{\n\t\t    \"username\":\"陈斌才\",\n\t\t    \"userid\":\"cbc\",\n\t\t    \"type\":\"一般用户\",\n\t\t    \"phone\":\"18559274808\",\n\t\t    \"sfzh\":\"35068229909876\",\n\t\t    \"password\":\"cbc\"\n    \t},\n    \t{\n    \t\t\"username\":\"陈斌才\",\n\t\t    \"userid\":\"cbc\",\n\t\t    \"type\":\"一般用户\",\n\t\t    \"phone\":\"18559274808\",\n\t\t    \"sfzh\":\"35068229909876\",\n\t\t    \"password\":\"cbc\"\n    \t}\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/excute.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"excute.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB delete",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_user.delete\",\r\n    \"id\":\"20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/excute.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"excute.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB 查询ID为10的username(测试事物)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sql\":\"mysql_user.findUserByID\",\n    \"id\":\"10\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/select.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"select.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB 设置ID为10的username=1(测试事物)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sql\":\"mysql_user.update\"\n}\n\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/excute.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"excute.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB excuteOneByOne(测试事务，一个一个执行)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_user.update1;mysql_user.update2\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/excuteOneByOne.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"excuteOneByOne.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DB excuteByBatch(测试事务，批量执行)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_user.updateMany\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/excuteByBatch.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"excuteByBatch.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ElasticSearch 创建poi索引",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"settings\":{\n\t\"index\":{\n\t\t\"number_of_shards\":5,\n\t\t\"number_of_replicas\":1\n    }\n  },\n  \"mappings\": {\n      \"properties\": {\n      \t\"id\": {\n          \"type\": \"keyword\"\n        },\n        \"abbrname\": {\n          \"type\": \"keyword\"\n        },\n        \"fullname\": {\n          \"type\": \"text\",\n          \"index_options\": \"docs\",\n          \"analyzer\": \"ik_max_word\"\n        },\n        \"lat\": {\n          \"type\": \"keyword\"\n        },\n        \"lng\": {\n          \"type\": \"keyword\"\n        },\n        \"point\": {\n          \"type\": \"geo_point\"\n        },\n        \"regioncode\": {\n          \"type\": \"keyword\"\n        },\n        \"type\": {\n          \"type\": \"keyword\"\n        },\n        \"address\": {\n          \"type\": \"keyword\"\n        }\n      }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://106.53.28.207:9200/gis-poi",
+					"protocol": "http",
+					"host": [
+						"106",
+						"53",
+						"28",
+						"207"
+					],
+					"port": "9200",
+					"path": [
+						"gis-poi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ElasticSearch 创建zzjg索引",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"settings\":{\n\t\"index\":{\n\t\t\"number_of_shards\":5,\n\t\t\"number_of_replicas\":1\n    }\n  },\n  \"mappings\": {\n      \"properties\": {\n      \t\"id\": {\n          \"type\": \"keyword\"\n        },\n        \"name\": {\n          \"type\": \"text\",\n          \"index_options\": \"docs\",\n          \"analyzer\": \"ik_max_word\"\n        },\n        \"pid\": {\n          \"type\": \"keyword\"\n        },\n        \"lat\": {\n          \"type\": \"keyword\"\n        },\n        \"lng\": {\n          \"type\": \"keyword\"\n        },\n        \"zbc\": {\n          \"type\": \"text\",\n          \"fields\": {\n            \"keyword\": {\n              \"type\": \"keyword\",\n              \"ignore_above\": 256\n            }\n          }\n        }\n      }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://106.53.28.207:9200/gis-zzjg",
+					"protocol": "http",
+					"host": [
+						"106",
+						"53",
+						"28",
+						"207"
+					],
+					"port": "9200",
+					"path": [
+						"gis-zzjg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ElasticSearch 删除poi索引",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://106.53.28.207:9200/gis-poi",
+					"protocol": "http",
+					"host": [
+						"106",
+						"53",
+						"28",
+						"207"
+					],
+					"port": "9200",
+					"path": [
+						"gis-poi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ElasticSearch 删除zzjg索引",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://106.53.28.207:9200/gis-zzjg",
+					"protocol": "http",
+					"host": [
+						"106",
+						"53",
+						"28",
+						"207"
+					],
+					"port": "9200",
+					"path": [
+						"gis-zzjg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ElasticSearch poi表转es索引",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"db\":\"db2\",\r\n    \"sql\":\"elastic_search.findAllPoi\",\r\n    \"index\":\"gis-poi\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/database/to/es.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"database",
+						"to",
+						"es.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ElasticSearch zzjg表转es索引",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"elastic_search.findAllZzjg\",\r\n    \"index\":\"gis-zzjg\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/database/to/es.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"database",
+						"to",
+						"es.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buffer 面缓冲区",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distance\":\"10\",\n    \"wktString\":\"Polygon((30 50,30 70,50 80,70 60,70 60,30 50))\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/buffer.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"buffer.cbc"
+					]
+				},
+				"description": "polygonBuffer"
+			},
+			"response": []
+		},
+		{
+			"name": "Buffer 线缓冲区",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"distance\":\"0.0008993210412845813\",\n    \"wktString\":\"LineString(118.07096958160402 24.460759162902832,118.0773639678955 24.457197189331055,118.08328628540038 24.46329116821289)\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/buffer.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"buffer.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GIS 正向匹配",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"regioncode\":\"350203\",\"type\":\"101005,101007\",\"keyword\":\"厦门市\",\"count\":\"10\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/positive/match.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"positive",
+						"match.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GIS 反向匹配",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"regioncode\":\"350203\",\"type\":\"101005\",\"count\":\"10\",\"lat\":\"24.45762634277344\",\"lng\":\"118.16104888916017\",\"radius\":\"123.5\",\"keyword\":\"王者网吧\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/reverse/match.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"reverse",
+						"match.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GIS 矩形空间查",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"regioncode\":\"350203\",\"type\":\"101005\",\"keyword\":\"王者网吧\",\"count\":\"10\",\"north\":\"24.47762634277344\",\"west\":\"118.14104888916017\",\"south\":\"24.43762634277344\",\"east\":\"118.18104888916017\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/space/rect.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"space",
+						"rect.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GIS 圆形空间查",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"regioncode\":\"350203\",\"type\":\"101005\",\"count\":\"10\",\"lat\":\"24.45762634277344\",\"lng\":\"118.16104888916017\",\"radius\":\"123.5\",\"keyword\":\"王者网吧\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/space/circle.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"space",
+						"circle.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GIS 多边形空间查",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"points\":[[{\"lat\":24.481658935546875,\"lng\":118.08002471923827},{\"lat\":24.463462829589847,\"lng\":118.06148529052734},{\"lat\":24.441146850585938,\"lng\":118.08277130126955},{\"lat\":24.46758270263672,\"lng\":118.10165405273438}]],\"regioncode\":\"350203\",\"type\":\"101005,101007\",\"keyword\":\"厦门市\",\"count\":\"10\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/space/polygon.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"space",
+						"polygon.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GIS 线周边查询",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"points\":[{\"lat\":24.466209411621094,\"lng\":118.10131072998047},{\"lat\":24.482345581054688,\"lng\":118.16963195800783},{\"lat\":24.45762634277344,\"lng\":118.08071136474611}],\"radius\":\"500\",\"regioncode\":\"350203\",\"type\":\"101005,101007\",\"keyword\":\"厦门市\",\"count\":\"10\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/polyline/buffer.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"polyline",
+						"buffer.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "组织机构信息获取",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"sql\":\"mysql_zzjg.zzjg_info\",\r\n\t\"id\":\"350203\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/select.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"select.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "组织机构树获取",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_zzjg.zzjg_tree\",\r\n    \"id\":\"350000\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/select.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"select.cbc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取子组织机构",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sql\":\"mysql_zzjg.zzjg_child\",\r\n    \"pid\":\"350000\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8087/cbc/select.cbc",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8087",
+					"path": [
+						"cbc",
+						"select.cbc"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

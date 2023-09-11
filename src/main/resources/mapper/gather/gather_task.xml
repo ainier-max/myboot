@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='gather_task'>
+    <!-- 判断某张表是否存在 -->
+    <select id="findTableByTableName" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+      		SELECT TABLE_NAME FROM information_schema.tables WHERE table_name =#{table_name,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 申请任务，所创建表的字段信息 -->
+    <insert id="applyTask" parameterType="java.util.HashMap">
+        <!-- 能获取主键 -->
+        <selectKey keyProperty="taskid" order="BEFORE" resultType="java.lang.Integer">
+            SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME='gather_task';
+        </selectKey>
+
+        INSERT INTO gather_task(id,name,description,table_name,type,cjsj,layerimg,flag,userid,color)
+        VALUES(#{taskid,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{table_name,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},NOW(),#{layerimg,jdbcType=VARCHAR},'0',#{userid,jdbcType=VARCHAR},#{color,jdbcType=VARCHAR});
+
+        INSERT INTO gather_task_field(table_name,field_name,field_dec,field_length,field_type,dicid,show_flag,taskid)
+        VALUES
+        <foreach collection="objects" item="item" separator=",">
+            (#{item.table_name,jdbcType=VARCHAR},#{item.field_name,jdbcType=VARCHAR},#{item.field_dec,jdbcType=VARCHAR},
+            #{item.field_length,jdbcType=VARCHAR},#{item.field_type,jdbcType=VARCHAR},#{item.dicid,jdbcType=VARCHAR},#{item.show_flag,jdbcType=VARCHAR},#{taskid,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+	<!-- 查找采集任务 -->
+	<select id="findGatherTask" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+		SELECT t.id,t.name,t.description,t.table_name,t.type,t.cjsj,layerimg,flag,t1.username,t.color FROM gather_task t,gather_user t1 WHERE t.userid=t1.userid
+		<if test="flag!=null and flag!=''">
+			and t.flag=#{flag,jdbcType=VARCHAR}
+		</if>
+		<if test="id!=null and id!=''">
+			and t.id=#{id, jdbcType=INTEGER}
+		</if>
+		ORDER BY CJSJ DESC
+	</select>
+
+	<!-- 查找某采集任务表的字段 -->
+	<select id="findGatherLayerField" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+		SELECT T1.name,T2.taskid,T2.id,T2.table_name,T2.field_name,T2.field_dec,T2.field_length,T2.field_type,T2.dicid,T2.show_flag,T1.type,T1.color
+		FROM gather_task_field T2,gather_task T1 WHERE T2.TASKID=T1.ID
+		<!--任务审批-->
+		<if test="approvalFlag==false">
+			and T1.FLAG='0'
+		</if>
+		<if test="table_name!=null and table_name!=''">
+			AND T2.TABLE_NAME=#{table_name,jdbcType=VARCHAR}
+		</if>
+		<if test="filter!=null and filter!=''">
+			AND T2.FIELD_NAME NOT LIKE concat(concat('%',#{filter}),'%')
+		</if>
+		<if test="taskid!=null and taskid!=''">
+			AND T2.TASKID=#{taskid,jdbcType=INTEGER}
+		</if>
+		<if test="show_flags!=null">
+			<foreach collection="show_flags" item="show_flag" open="AND SHOW_FLAG in (" close=")" separator=",">
+				<!-- 每次遍历需要拼接的串 -->
+				#{show_flag,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		ORDER BY SHOW_FLAG
+	</select>
+	<!-- 查找某采集任务表的图片字段 -->
+	<select id="findGatherLayerImg" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+		SELECT layerimg FROM GATHER_TASK where id=#{taskid,jdbcType=INTEGER}
+	</select>
+
+	<!-- 更新图层字段信息 -->
+	<update id="updateGatherTaskField" parameterType="java.util.HashMap">
+		<if test="field_type=='photo' or field_type=='audio' or field_type=='video' or field_type=='rich'">
+			ALTER TABLE ${table_name} CHANGE ${old_field_name} ${field_name} TEXT COMMENT &apos;${field_dec}&apos;;
+			UPDATE gather_task_field SET field_name=#{field_name,jdbcType=VARCHAR},field_dec=#{field_dec,jdbcType=VARCHAR},show_flag=#{show_flag,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=INTEGER};
+		</if>
+
+		<if test="field_type!='photo' and field_type!='audio' and field_type!='video' and field_type!='rich' ">
+			ALTER TABLE ${table_name} CHANGE ${old_field_name} ${field_name} VARCHAR(${field_length}) COMMENT &apos;${field_dec}&apos;;
+			UPDATE gather_task_field SET field_name=#{field_name,jdbcType=VARCHAR},field_dec=#{field_dec,jdbcType=VARCHAR},field_length=#{field_length,jdbcType=VARCHAR},show_flag=#{show_flag,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=INTEGER};
+		</if>
+	</update>
+
+	<!-- 删除图层字段信息 -->
+	<delete id="deleteField" parameterType="java.util.HashMap">
+		ALTER TABLE ${table_name} DROP COLUMN ${field_name};
+		DELETE FROM gather_task_field WHERE id=#{id,jdbcType=INTEGER};
+	</delete>
+	<!--新增图层字段信息-->
+	<insert id="insertField" parameterType="java.util.HashMap">
+		<if test="field_type=='photo' or field_type=='audio' or field_type=='video' or field_type=='rich'">
+			ALTER TABLE ${table_name} ADD ${field_name} TEXT COMMENT &apos;${field_dec}&apos;;
+		</if>
+
+		<if test="field_type!='photo' and field_type!='audio' and field_type!='video' and field_type!='rich'">
+			ALTER TABLE ${table_name} ADD ${field_name} VARCHAR(${field_length}) COMMENT &apos;${field_dec}&apos;;
+		</if>
+		INSERT INTO gather_task_field(table_name,field_name,field_dec,field_length,field_type,dicid,show_flag,taskid) VALUES
+		(#{table_name,jdbcType=VARCHAR},#{field_name,jdbcType=VARCHAR},#{field_dec,jdbcType=VARCHAR},
+		#{field_length,jdbcType=VARCHAR},#{field_type,jdbcType=VARCHAR},#{dicid,jdbcType=VARCHAR},#{show_flag,jdbcType=VARCHAR},#{taskid,jdbcType=INTEGER});
+	</insert>
+
+
+	<!-- 任务审批否决 -->
+	<delete id="refuseGatherTask" parameterType="java.util.HashMap">
+      		DELETE FROM gather_task WHERE id=#{id,jdbcType=INTEGER};
+      		DELETE FROM gather_task_field WHERE taskid=#{id,jdbcType=INTEGER};
+    </delete>
+	<!-- 任务授权后创建相应的表格 -->
+	<update id="createTable" parameterType="java.util.HashMap" >
+		CREATE TABLE IF NOT EXISTS ${table_name}(
+		<foreach collection="fields" item="item" >
+			<choose>
+				<when test="item.field_name=='GATHER_ID'">
+					${item.field_name} INT UNSIGNED AUTO_INCREMENT,
+				</when>
+				<when test="item.field_name=='GATHER_ZBC' || item.field_type=='photo' || item.field_type=='audio'  || item.field_type=='video'">
+					${item.field_name} TEXT,
+				</when>
+				<when test="item.field_type=='rich'">
+					${item.field_name} LONGTEXT,
+				</when>
+				<otherwise>
+					${item.field_name} VARCHAR(${item.field_length}),
+				</otherwise>
+			</choose>
+		</foreach>
+		PRIMARY KEY (GATHER_ID))ENGINE=INNODB DEFAULT CHARSET=utf8;
+		UPDATE gather_task SET flag='1' WHERE table_name=#{table_name,jdbcType=VARCHAR};
+	</update>
+
+
+	<update id="updateGatherTask" parameterType="java.util.HashMap">
+		UPDATE gather_task SET NAME=#{name,jdbcType=VARCHAR},DESCRIPTION=#{description,jdbcType=VARCHAR},LAYERIMG=#{layerimg,jdbcType=VARCHAR},COLOR=#{color,jdbcType=VARCHAR} WHERE ID=#{id,jdbcType=INTEGER};
+		UPDATE gather_task_tree SET NAME=#{name,jdbcType=VARCHAR} WHERE TASKID=#{id,jdbcType=INTEGER}
+	</update>
+
+	<!--采集任务数据量-->
+	<select id="gatherTaskCount" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+		SELECT count(1) AS SUM_COUNT  FROM ${table_name}
+	</select>
+	<!-- 删除采集任务任务（含表数据，正式环境去掉删除表的逻辑） -->
+	<delete id="deleteGatherTask" parameterType="java.util.HashMap">
+		DELETE FROM gather_task_field WHERE taskid=#{id,jdbcType=INTEGER};
+		DELETE FROM gather_task WHERE id=#{id,jdbcType=INTEGER};
+		DELETE FROM gather_task_user WHERE taskid=#{id,jdbcType=INTEGER};
+		DELETE FROM gather_task_tree WHERE taskid=#{id,jdbcType=INTEGER};
+		DROP TABLE ${table_name} ;
+	</delete>
+
+
+
+
+
+</mapper>

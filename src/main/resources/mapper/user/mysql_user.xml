@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+namespace命名空间，作用就是sql进行分类化管理，理解sql隔离
+注意：使用mapper代理开发，namespace有特殊重要的作用
+mysql：innodb_flush_log_at_trx_commit为1的时候，大多数时间CPU都在等待日志的读写。
+当设置为0，该模式速度最快，但不太安全，mysqld进程的崩溃会导致上一秒钟所有事务数据的丢失。
+当设置为1，该模式是最安全的，但也是最慢的一种方式。在mysqld 服务崩溃或者服务器主机crash的情况下，binary log 只有可能丢失最多一个语句或者一个事务。。
+当设置为2，该模式速度较快，也比0安全，只有在操作系统崩溃或者系统断电的情况下，上一秒钟所有事务数据才可能丢失。
+SET GLOBAL innodb_flush_log_at_trx_commit=0;
+ -->
+<mapper namespace='mysql_user'>
+
+	    <select id="findUser" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	   		SELECT * FROM gis_user WHERE 1=1
+			<if test="username!=null and username!=''">
+				and username =#{username, jdbcType=VARCHAR}
+			</if>
+	   		<if test="ids!=null">
+				 <foreach collection="ids" item="id" open="AND id in (" close=")" separator=",">
+						<!-- 每次遍历需要拼接的串 -->
+						#{id,jdbcType=VARCHAR}
+				 </foreach>
+			</if>
+	    </select>
+	  
+	  	<insert id="insert" useGeneratedKeys="true" parameterType="java.util.HashMap">
+	  		<!-- 能获取主键 -->
+	   		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+		 		SELECT LAST_INSERT_ID()
+		 	</selectKey>
+	        insert into GIS_USER (username,cjsj,type,userid,sfzh,phone,password) values
+	         (#{username,jdbcType=VARCHAR},NOW(),#{type,jdbcType=VARCHAR},#{userid,jdbcType=VARCHAR},
+	         #{phone,jdbcType=VARCHAR},#{sfzh,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+    	</insert>
+    	
+	    <insert id="insertMany" parameterType="java.util.HashMap" >
+	        insert into GIS_USER (username,cjsj,type,userid,sfzh,phone,password) values
+	        <foreach collection="objects" item="item" separator=",">
+	            (#{item.username,jdbcType=VARCHAR},NOW(),#{item.type,jdbcType=VARCHAR},#{item.userid,jdbcType=VARCHAR},
+	            #{item.phone,jdbcType=VARCHAR},#{item.sfzh,jdbcType=VARCHAR},#{item.password,jdbcType=VARCHAR})
+	        </foreach>
+    	</insert>
+    	
+    	<delete id="delete" parameterType="java.util.HashMap" >
+    		DELETE FROM GIS_USER WHERE id>#{id}
+    	</delete>
+
+		<!-- 根据ID查询 -->
+		<select id="findUserByID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+			SELECT ID,USERNAME FROM GIS_USER
+			<where>
+				id=#{id}
+			</where>
+		</select>
+
+		<update id="update" parameterType="java.util.HashMap">
+			UPDATE GIS_USER SET username='1' WHERE id=10;
+		</update>
+		<!-- 事务管理测试(1) -->
+	 	<update id="update1" parameterType="java.util.HashMap">
+      		UPDATE GIS_USER SET username='2' WHERE id=10;
+        </update>
+        <update id="update2" parameterType="java.util.HashMap">
+      		UPDATE GIS_USER SET username='3' WHERE id=10;
+        </update>
+        
+        <!-- 事务管理测试(2) -->
+        <!-- 注：druid连接池不支持该写法 -->
+	  	<update id="updateMany" parameterType="java.util.HashMap">
+	  		UPDATE GIS_USER SET username='2' WHERE id=10;
+	  		UPDATE GIS_USER SET username='3' WHERE id=10;
+	  		<!-- 测试语句，id为主键，如果重复，则发出异常，进行回滚 
+	  		UPDATE USER SET id='2' WHERE id=1;
+	  		-->
+	  	</update>
+	  	
+	    <select id="zzjg_tree" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	 		SELECT ID,NAME,PID FROM T_ZZJG WHERE FIND_IN_SET(id, queryChildrenAreaInfo(#{id,jdbcType=INTEGER})); 
+	  	</select>
+	  	
+	 
+</mapper>
+<!-- mysql 递归查询函数
+DELIMITER $$
+CREATE
+    /*[DEFINER = { user | CURRENT_USER }]*/
+    FUNCTION queryChildrenAreaInfo (areaId INT)
+	RETURNS VARCHAR(4000)
+	BEGIN
+	DECLARE sTemp VARCHAR(4000);
+	DECLARE sTempChd VARCHAR(4000);
+
+	SET sTemp = '$';
+	SET sTempChd = CAST(areaId AS CHAR);
+
+	WHILE sTempChd IS NOT NULL DO
+	SET sTemp = CONCAT(sTemp,',',sTempChd);
+	SELECT GROUP_CONCAT(id) INTO sTempChd FROM gather_tree WHERE FIND_IN_SET(pid,sTempChd)>0;
+	END WHILE;
+	RETURN sTemp;
+    END$$
+DELIMITER ;
+
+调用方法：
+SELECT * FROM gather_tree WHERE FIND_IN_SET(id, queryChildrenAreaInfo(2)); 
+ -->

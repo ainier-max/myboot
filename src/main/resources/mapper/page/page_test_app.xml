@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_test_app'>
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t1.id,t1.title ,t1.url ,t1.imgurl,t2.appid,t2.userid,t2.index_flag  from page_test_app t1 left join page_test_app_userid t2 on t1.id=t2.appid
+        where 1=1
+        and userid=#{userid, jdbcType=VARCHAR}
+        order by t2.index_flag
+    </select>
+
+    <select id="findChecked" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t3.id,&apos;${userid}&apos; as userid,t3.index_flag,t3.name,IF(userid is null,'false','true') as checked  from (
+              select t1.id,t1.title as name,t2.userid,t2.index_flag from page_test_app t1
+                left join (select appid,userid,index_flag from page_test_app_userid where  userid=#{userid, jdbcType=VARCHAR}) t2 on t1.id=t2.appid
+            ) t3
+    </select>
+
+    <select id="change" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        delete from page_test_app_userid where userid=#{userid, jdbcType=VARCHAR};
+        <if test="arr != null and arr.size()>0">
+            insert into page_test_app_userid (appid,userid,index_flag) values
+            <foreach collection="arr" item="item" separator=",">
+                (#{item.appid,jdbcType=VARCHAR},#{item.userid,jdbcType=VARCHAR},#{item.index_flag,jdbcType=VARCHAR})
+            </foreach>;
+        </if>
+    </select>
+
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from page_test_app_userid WHERE appid=#{id,jdbcType=INTEGER} and userid=#{userid,jdbcType=INTEGER};
+    </delete>
+
+
+    <insert id="insertAppUser" parameterType="java.util.HashMap">
+        insert into page_test_app_userid(appid,userid,index_flag)
+        select &apos;${id}&apos; as appid,&apos;${userid}&apos; as userid,(max(index_flag) +1) as index_flag  from page_test_app_userid where userid=#{userid,jdbcType=INTEGER};
+    </insert>
+
+
+
+
+</mapper>

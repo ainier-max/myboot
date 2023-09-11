@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_back'>
+    <!--
+版本回滚
+insert into page_blue_script(blue_script_ref,component_ref ,name,type,config_str,zbx,zby,page_id)
+select blue_script_ref,component_ref ,name,type,config_str,zbx,zby,page_id from page_blue_script_back where page_id=8 and back_time='2023-02-16 15:53:02'
+    -->
+    <insert id="saveAllPageComponent" parameterType="java.util.HashMap">
+
+        /*1.变量定义*/
+        select @nowDate:=now();
+
+        <!--保存备份到page_back-->
+        insert into page_block_component_back(component_ref,component_name,component_config_str,component_type,page_block_ref,layout_ref,page_id,type,back_time,back_ms)
+        select component_ref,component_name,component_config_str,component_type,page_block_ref,layout_ref,page_id,type,@nowDate as back_time,'保存备份' as back_ms from page_block_component where page_id=#{page_id,jdbcType=INTEGER};
+        <!--根据page_block_ref删除page中的组件-->
+        delete from page_block_component where page_id=#{page_id,jdbcType=VARCHAR};
+        <!--加入新的page组件-->
+        <if test="pageComponents.size() > 0">
+            insert into page_block_component (component_ref,component_name,component_config_str,component_type,page_block_ref,layout_ref,page_id,type) values
+            <foreach collection="pageComponents" item="item" separator=",">
+                (#{item.component_ref,jdbcType=VARCHAR},#{item.component_name,jdbcType=VARCHAR},#{item.component_config_str,jdbcType=VARCHAR},
+                #{item.component_type,jdbcType=VARCHAR},#{item.page_block_ref,jdbcType=VARCHAR},#{item.layout_ref,jdbcType=VARCHAR},#{item.page_id,jdbcType=INTEGER},#{item.type,jdbcType=VARCHAR})
+            </foreach>;
+        </if>
+
+        <!--保存备份到page_block_layout_back-->
+        insert into page_block_layout_back(layout_ref,layout_name,layout_config_str,layout_type,page_block_ref,page_id,back_time,back_ms)
+        select layout_ref,layout_name,layout_config_str,layout_type,page_block_ref,page_id,@nowDate as back_time,'保存备份' as back_ms from page_block_layout where page_id=#{page_id,jdbcType=INTEGER};
+        <!--根据page_block_ref删除page_block_layout中的布局组件-->
+        delete from page_block_layout where page_id=#{page_id,jdbcType=VARCHAR};
+        <!--加入新的布局组件-->
+        <if test="pageLayouts.size() > 0">
+            INSERT INTO page_block_layout(layout_ref, layout_type, layout_name, layout_config_str, page_block_ref,page_id) values
+            <foreach collection="pageLayouts" item="item" separator=",">
+                (#{item.layout_ref,jdbcType=VARCHAR},
+                 #{item.layout_type,jdbcType=VARCHAR},
+                 #{item.layout_name,jdbcType=VARCHAR},
+                 #{item.layout_config_str,jdbcType=BLOB},
+                 #{item.page_block_ref,jdbcType=VARCHAR},
+                 #{item.page_id,jdbcType=INTEGER})
+            </foreach>;
+        </if>
+
+    </insert>
+
+    <insert id="saveAllPageBlueScript" parameterType="java.util.HashMap">
+        /*1.变量定义*/
+        select @nowDate:=now();
+        <!--保存备份到page_blue_script_back-->
+        insert into page_blue_script_back(blue_script_ref,component_ref,zbx,zby,page_id,blue_script_type,type,config_str,name,back_time,back_ms)
+        select blue_script_ref,component_ref,zbx,zby,page_id ,blue_script_type,type,config_str,name,@nowDate as back_time,'保存备份' as back_ms from page_blue_script where page_id=#{page_id,jdbcType=INTEGER};
+        <!--根据page_id删除page_blue_script中的组件-->
+        delete from page_blue_script where page_id=#{page_id,jdbcType=INTEGER};
+        <!--加入新的page_blue_script组件-->
+
+        <if test="pageBlueScripts != null and pageBlueScripts.size()>0">
+            insert into page_blue_script (blue_script_ref,component_ref,zbx,zby,page_id,blue_script_type,type,config_str,name) values
+            <foreach collection="pageBlueScripts" item="item" separator=",">
+                (#{item.blue_script_ref,jdbcType=VARCHAR},#{item.component_ref,jdbcType=VARCHAR},#{item.zbx,jdbcType=INTEGER},#{item.zby,jdbcType=INTEGER},
+                #{item.page_id,jdbcType=INTEGER},#{item.blue_script_type,jdbcType=VARCHAR},#{item.type,jdbcType=VARCHAR},#{item.config_str,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR})
+            </foreach>;
+        </if>
+    </insert>
+</mapper>

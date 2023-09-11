@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_block_component'>
+
+    <insert id="insert" parameterType="java.util.HashMap">
+        INSERT INTO page(component_name,component_config_str,page_name,page_id,component_type) VALUES
+        (#{component_name,jdbcType=VARCHAR},#{component_config_str,jdbcType=BLOB},#{page_name,jdbcType=VARCHAR},#{page_id,jdbcType=INTEGER},#{component_type,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 查找数据 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT ref,component_name,component_config_str,component_type,page_id,page_name FROM page_block_tree_id where 1=1
+        <if test="page_block_tree_id!=null and page_block_tree_id!=''">
+            and page_block_tree_id=#{page_block_tree_id, jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <!-- 关联查询（含组件代码） -->
+    <select id="findIncludeCode" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT t1.component_ref,t1.component_name,t1.component_config_str,t1.component_type,t1.page_block_ref,t1.layout_ref,t1.page_id,t1.type,t2.component_code,
+               t2.component_visualize_str,t2.blue_script_in_out_config_str,t2.blue_script_node_config_str,
+               t2.blue_script_logic_config_str,t2.blue_script_visualize_config_str
+        FROM page_block_component t1
+            left join page_component t2
+            on t1.component_type=t2.component_type
+        where 1=1
+        <if test="page_block_ref!=null and page_block_ref!=''">
+            and page_block_ref=#{page_block_ref, jdbcType=VARCHAR}
+        </if>
+        <if test="page_id!=null and page_id!=''">
+            and page_id=#{page_id, jdbcType=INTEGER}
+        </if>
+    </select>
+
+
+
+</mapper>

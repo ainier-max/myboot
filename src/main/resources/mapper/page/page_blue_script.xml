@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_blue_script'>
+    <insert id="insert" parameterType="java.util.HashMap">
+        INSERT INTO page_blue_script(blue_script_ref,component_ref,zbx,zby,page_id,blue_script_type,type,name) VALUES
+        (#{blue_script_ref,jdbcType=VARCHAR},#{component_ref,jdbcType=VARCHAR},#{zbx,jdbcType=INTEGER},#{zby,jdbcType=INTEGER},#{page_id,jdbcType=INTEGER},#{blue_script_type,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR})
+    </insert>
+    <!-- 查找数据 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select blue_script_ref,component_ref,blue_script_type,type,config_str,zbx,zby,page_id,name from page_blue_script  where 1=1
+        and page_id=#{page_id, jdbcType=INTEGER}
+    </select>
+
+    <!-- 关联配置查询 -->
+    <select id="findForConfig" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t.blue_script_ref,t.component_ref,t.blue_script_type,t.type,t.config_str,t.zbx,t.zby,t.page_id,t.name,
+               t1.blue_script_in_out_config_str,t1.blue_script_node_config_str,t1.blue_script_logic_config_str,t1.blue_script_visualize_config_str
+        from page_blue_script t left join(
+            select component_type as blue_script_type,blue_script_in_out_config_str, blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str
+            from page_component where component_type in(select blue_script_type from page_blue_script where page_id=#{page_id, jdbcType=INTEGER})
+            UNION all
+            select blue_script_type as blue_script_type,blue_script_in_out_config_str, blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str
+            from page_blue_script_tools where blue_script_type in(select blue_script_type from page_blue_script where page_id=#{page_id, jdbcType=INTEGER})
+        ) t1 on t.blue_script_type=t1.blue_script_type where page_id=#{page_id, jdbcType=INTEGER}
+    </select>
+
+
+</mapper>

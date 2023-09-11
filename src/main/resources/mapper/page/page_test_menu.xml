@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_test_menu'>
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t1.id,t1.name,t1.pageBlockRef ,t2.userid  from page_test_menu t1 left join page_test_menu_user t2 on t1.name =t2.name where 1=1
+        <if test="userid!=null and userid!=''">
+            and t2.userid=#{userid, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="findChecked" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t3.name,IF(userid is null,'false','true') as checked  from (
+              select t1.name,t2.userid from page_test_menu t1
+                    left join (select name,userid from page_test_menu_user where  userid=#{userid,jdbcType=VARCHAR}) t2 on t1.name=t2.name
+        ) t3
+    </select>
+
+    <insert id="insertMenuUser" parameterType="java.util.HashMap">
+        insert into page_test_menu_user(name,userid) VALUES
+            (#{name,jdbcType=INTEGER},#{userid,jdbcType=VARCHAR});
+    </insert>
+
+
+    <delete id="deleteMenuUser" parameterType="java.util.HashMap">
+        delete from page_test_menu_user WHERE name=#{name,jdbcType=INTEGER} and userid=#{userid,jdbcType=INTEGER};
+    </delete>
+
+
+
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_test_jq'>
+
+    <insert id="insert" parameterType="java.util.HashMap">
+        INSERT INTO page_test_jq(area,jqlx,bjyf,bjnr) VALUES
+        (#{area,jdbcType=VARCHAR},#{jqlx,jdbcType=VARCHAR},#{bjyf,jdbcType=VARCHAR},#{bjnr,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT count(1) as sum,jqlx FROM page_test_jq where 1=1
+
+        <if test="area!=null and area!=''">
+            and area=#{area, jdbcType=VARCHAR}
+        </if>
+        <if test="bjyf!=null and bjyf!=''">
+            and bjyf=#{bjyf, jdbcType=VARCHAR}
+        </if>
+         group by jqlx
+    </select>
+
+    <select id="findCountJqxl" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT count,jqxl FROM page_test_jqxl_count where 1=1
+        <if test="jqlx!=null and jqlx!=''">
+            and jqlx=#{jqlx, jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <select id="findCountByArea" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT count,area FROM page_test_count_area where 1=1
+        <if test="area!=null and area!=''">
+            and area=#{area, jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <select id="findCountQuxian" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT count,area FROM page_test_count_quxian where 1=1
+        <if test="ssqy!=null and ssqy!=''">
+            and ssqy=#{ssqy, jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <select id="findCountAreaInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT id,count,area FROM page_test_count_area
+        <if test="size!=null and size!=''">
+            limit ${start},${size}
+        </if>
+    </select>
+
+    <insert id="insertCountAreaInfo" parameterType="java.util.HashMap">
+        insert into page_test_count_area(count,area) VALUES
+        (#{count,jdbcType=VARCHAR},#{area,jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteCountAreaInfo" parameterType="java.util.HashMap">
+        delete from page_test_count_area where id=#{id,jdbcType=INTEGER};
+    </delete>
+
+    <update id="updateCountAreaInfo" parameterType="java.util.HashMap">
+        UPDATE page_test_count_area SET count=#{count,jdbcType=VARCHAR},area=#{area,jdbcType=VARCHAR}
+        WHERE id=#{id,jdbcType=INTEGER};
+    </update>
+
+    <select id="findNum" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT count(1) as count FROM page_test_count_area
+    </select>
+
+
+
+</mapper>

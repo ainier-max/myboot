@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='gather_task_tree'>
+    <!-- 查询图层树 -->
+    <select id="findGatherTaskTree" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+		SELECT t.ID,t.NAME,t.PID,t.TASKID,t.TABLE_NAME,t1.LAYERIMG,t1.TYPE,t1.COLOR,t1.DESCRIPTION  FROM gather_task_tree t LEFT JOIN gather_task t1
+		ON t.taskid=t1.id
+    </select>
+    <!-- 增加树菜单 -->
+    <insert id="addGatherTaskTree" parameterType="java.util.HashMap" >
+        INSERT INTO gather_task_tree(name,pid) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=VARCHAR})
+    </insert>
+    <!-- 增加图层 -->
+    <insert id="addGatherTaskTreeLayer" parameterType="java.util.HashMap" >
+        INSERT INTO gather_task_tree(name,pid,taskid,table_name) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{taskid,jdbcType=INTEGER},#{table_name,jdbcType=INTEGER})
+    </insert>
+    <!-- 更新树菜单 -->
+    <update id="updateGatherTaskTree" parameterType="java.util.HashMap" >
+        UPDATE gather_task_tree SET NAME=#{name,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+    <!-- 删除菜单及其所属下的菜单和图层 -->
+    <delete id="deleteGatherTaskTree" parameterType="java.util.HashMap" >
+        DELETE FROM gather_task_tree  WHERE 1=1
+        <foreach collection="ids" item="id" open="AND id in (" close=")" separator=",">
+            <!-- 每次遍历需要拼接的串 -->
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+</mapper>

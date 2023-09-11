@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='gather_task_user'>
+    <insert id="insert" parameterType="java.util.HashMap">
+        INSERT INTO gather_task_user(TASKID,USERID,TIME) VALUES(#{taskid,jdbcType=INTEGER},#{userid,jdbcType=VARCHAR},NOW())
+    </insert>
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT T2.TABLE_NAME,T1.ID,T1.TASKID,T1.USERID,T2.NAME,T2.TYPE,T2.LAYERIMG,T2.COLOR,T3.USERNAME,T1.TIME,T3.PHONE FROM GATHER_TASK_USER T1,GATHER_TASK T2,GATHER_USER T3 WHERE T1.TASKID=T2.ID AND T1.USERID=T3.USERID
+        <if test="taskid!=null and taskid!=''">
+            AND T1.TASKID=#{taskid,jdbcType=INTEGER}
+        </if>
+        <if test="userid!=null and userid!=''">
+            AND t3.USERID=#{userid,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <!--查找某个采集任务未被授权的人员-->
+    <select id="findNotExist" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT T.USERID,T.USERNAME,T.PHONE,T.SFZH FROM GATHER_USER T WHERE T.USERID NOT IN(
+            SELECT T1.USERID FROM GATHER_TASK_USER T1,GATHER_USER T3 WHERE T1.USERID=T3.USERID
+            AND T1.TASKID=#{taskid,jdbcType=INTEGER}
+        )
+    </select>
+    <!--查找当前用户下被授权的采集任务-->
+    <select id="findTaskDistribution" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT t2.cjsj,t2.name,t2.table_name,t2.type,t1.taskid,t1.userid FROM GATHER_TASK_USER t1,GATHER_TASK t2,GATHER_USER t3
+        WHERE t1.userid=t3.userid AND t1.taskid=t2.id
+        <if test="userid!=null and userid!=''">
+            AND t3.userid=#{userid,jdbcType=VARCHAR}
+        </if>
+        order by t2.cjsj desc
+    </select>
+
+
+    <!-- 删除图层字段信息 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        DELETE FROM gather_task_user WHERE taskid=#{taskid,jdbcType=INTEGER} and userid=#{userid,jdbcType=VARCHAR}
+    </delete>
+
+
+
+
+
+</mapper>

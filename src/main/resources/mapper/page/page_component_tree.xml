@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_component_tree'>
+    <!-- 查询组件树 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT id,name,pid,component_type FROM page_component_tree
+    </select>
+
+    <!-- 增加树菜单 -->
+    <insert id="insert" parameterType="java.util.HashMap" >
+        INSERT INTO page_component_tree(name,pid,component_type) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{component_type,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 更新树菜单 -->
+    <update id="update" parameterType="java.util.HashMap" >
+        UPDATE page_component_tree SET name=#{name,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 删除菜单及其所属下的菜单和图层 -->
+    <delete id="delete" parameterType="java.util.HashMap" >
+        DELETE FROM page_component_tree  WHERE 1=1
+        <foreach collection="ids" item="id" open="AND id in (" close=")" separator=",">
+            <!-- 每次遍历需要拼接的串 -->
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+
+
+
+
+</mapper>

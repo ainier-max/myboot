@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='gather_tree_dic'>
+    <insert id="insert_tree_dic" parameterType="java.util.HashMap">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+        INSERT INTO gather_tree_dic(treename,treems,treelength,tablename)
+        VALUES(#{treename,jdbcType=VARCHAR},#{treems,jdbcType=VARCHAR},#{treelength,jdbcType=VARCHAR},#{tablename,jdbcType=VARCHAR});
+
+        CREATE TABLE IF NOT EXISTS ${tablename}(
+        ID VARCHAR(50),
+        NAME VARCHAR(50),
+        PID VARCHAR(50),
+        PRIMARY KEY (ID)
+        )ENGINE=INNODB DEFAULT CHARSET=utf8;
+    </insert>
+
+    <select id="find_tree_dic" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select treems,treeid,treename,treelength,tablename from gather_tree_dic t
+        <where>
+            <if test="treeid!=null and treeid!=''">
+                t.treeid =#{treeid, jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert_tree_dic_data" parameterType="java.util.HashMap">
+       		INSERT INTO  ${treetablename}(ID,NAME,PID) VALUES(#{dictreedataid,jdbcType=VARCHAR},#{dictreedataname,jdbcType=VARCHAR},#{pid,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update_tree_dic_data" parameterType="java.util.HashMap">
+            update  ${treetablename} set NAME=#{dictreedataname,jdbcType=VARCHAR}
+            where id=#{dictreedataid,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete_tree_dic_data" parameterType="java.util.HashMap">
+            DELETE FROM ${treetablename} WHERE id IN(
+				SELECT t8.id FROM (
+				SELECT ID,NAME,PID FROM (
+				              SELECT t1.*,
+				              IF(FIND_IN_SET(pid, @pids) >0, @pids := CONCAT(@pids, ',', id), 0) AS ischild
+				              FROM (
+				                   SELECT * FROM ${treetablename} t  ORDER BY pid, id
+				                  ) t1,
+				                  (SELECT @pids := #{dictreedataid}) t2
+				             ) t3 WHERE ischild != 0
+				UNION ALL
+				SELECT ID,NAME,PID FROM ${treetablename} WHERE ID=#{dictreedataid}) t8)
+    </delete>
+
+    <delete id="delete_tree_dic"  parameterType="java.util.List">
+       		DELETE FROM gather_tree_dic  WHERE treeid=#{treeid,jdbcType=INTEGER};
+       		DROP TABLE ${tablename}
+       </delete>
+
+    <select id="find_tree_dic_data" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+            SELECT id,name as label,pid FROM ${treetablename}
+    </select>
+
+
+
+</mapper>

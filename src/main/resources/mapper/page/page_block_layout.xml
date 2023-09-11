@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_block_layout'>
+
+    <!--插入数据（简化）-->
+    <insert id="insert" parameterType="java.util.HashMap">
+        INSERT INTO page_layout(layout_ref, layout_type, layout_name, layout_config_str, page_block_ref)
+        VALUES (#{layout_ref,jdbcType=VARCHAR},
+                #{layout_type,jdbcType=VARCHAR},
+                #{layout_name,jdbcType=VARCHAR},
+                #{layout_config_str,jdbcType=BLOB},
+                #{page_block_ref,jdbcType=VARCHAR}
+                )
+    </insert>
+
+    <!-- 查找数据 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select layout_ref,layout_type,layout_name,layout_config_str,page_block_ref,page_id
+        from page_block_layout where 1=1
+        <if test="page_block_ref!=null and page_block_ref!=''">
+            and page_block_ref=#{page_block_ref, jdbcType=VARCHAR}
+        </if>
+        <if test="page_id!=null and page_id!=''">
+            and page_id=#{page_id, jdbcType=INTEGER}
+        </if>
+    </select>
+
+</mapper>

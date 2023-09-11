@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_data_model'>
+    <!-- 查询组件树 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT data_model_id,data_model_name,data_model_in,data_model_out,data_model_sql FROM page_data_model where 1=1
+        <if test="data_model_id!=null and data_model_id!=''">
+            and data_model_id=#{data_model_id,jdbcType=INTEGER};
+        </if>
+
+    </select>
+
+
+
+
+</mapper>

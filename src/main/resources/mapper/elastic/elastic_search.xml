@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--indexID对应索引"_id"-->
+<mapper namespace='elastic_search'>
+    <!-- 查询所有的POI -->
+    <select id="findAllPoi" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	 		SELECT CONCAT(type,'',id) as indexID,id,abbrname,CONCAT(abbrname,'',address) as fullname,lat,lng,regioncode,type,CONCAT(lat,',',lng) AS point,address FROM gis_poi
+	</select>
+    <!-- 查询所有的组织机构 -->
+    <select id="findAllZzjg" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+	 		 SELECT id as indexID,id,name,pid,lng,lat,zbc FROM gis_zzjg
+	</select>
+
+</mapper>

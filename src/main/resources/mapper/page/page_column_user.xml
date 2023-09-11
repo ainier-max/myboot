@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_column_user'>
+
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select column_id,userid,column_config_str  from page_column_user where column_id=#{column_id,jdbcType=VARCHAR} and userid=#{userid,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="java.util.HashMap">
+        insert into page_column_user(userid,column_config_str) VALUES
+            (#{userid,jdbcType=VARCHAR},#{column_config_str,jdbcType=BLOB});
+    </insert>
+
+
+    <update id="update" parameterType="java.util.HashMap">
+        delete from page_column_user where column_id=#{column_id,jdbcType=VARCHAR} and userid=#{userid,jdbcType=VARCHAR};
+        insert into page_column_user(userid,column_config_str,column_id) VALUES
+            (#{userid,jdbcType=VARCHAR},#{column_config_str,jdbcType=BLOB},#{column_id,jdbcType=VARCHAR});
+    </update>
+
+</mapper>

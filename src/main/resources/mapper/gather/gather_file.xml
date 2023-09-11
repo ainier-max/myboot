@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='gather_file'>
+    <!-- 插入 -->
+    <insert id="insert" parameterType="java.util.HashMap">
+        INSERT INTO gather_file(uuid,table_name,file_type,content,upload_time) values
+        (#{uuid,jdbcType=VARCHAR},#{table_name,jdbcType=VARCHAR},#{file_type,jdbcType=VARCHAR},#{content,jdbcType=BLOB},NOW())
+    </insert>
+
+    <!-- 查找某采集任务表的图片字段 -->
+    <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT uuid,table_name,file_type,content,upload_time FROM gather_file t where 1=1
+        <if test="uuid!=null and uuid!=''">
+            and t.uuid=#{uuid, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+    <!-- 插入 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from gather_file where uuid=#{uuid,jdbcType=VARCHAR}
+    </delete>
+
+
+
+
+
+
+</mapper>
