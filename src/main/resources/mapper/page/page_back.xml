@@ -14,16 +14,16 @@ select blue_script_ref,component_ref ,name,type,config_str,zbx,zby,page_id from 
         select @nowDate:=now();
 
         <!--保存备份到page_back-->
-        insert into page_block_component_back(component_ref,component_name,component_config_str,component_type,page_block_ref,layout_ref,page_id,type,back_time,back_ms)
-        select component_ref,component_name,component_config_str,component_type,page_block_ref,layout_ref,page_id,type,@nowDate as back_time,'保存备份' as back_ms from page_block_component where page_id=#{page_id,jdbcType=INTEGER};
+        insert into page_block_component_back(component_ref,component_name,component_config_str,component_id,page_block_ref,layout_ref,page_id,type,back_time,back_ms)
+        select component_ref,component_name,component_config_str,component_id,page_block_ref,layout_ref,page_id,type,@nowDate as back_time,'保存备份' as back_ms from page_block_component where page_id=#{page_id,jdbcType=INTEGER};
         <!--根据page_block_ref删除page中的组件-->
         delete from page_block_component where page_id=#{page_id,jdbcType=VARCHAR};
         <!--加入新的page组件-->
         <if test="pageComponents.size() > 0">
-            insert into page_block_component (component_ref,component_name,component_config_str,component_type,page_block_ref,layout_ref,page_id,type) values
+            insert into page_block_component (component_ref,component_name,component_config_str,component_id,page_block_ref,layout_ref,page_id,type) values
             <foreach collection="pageComponents" item="item" separator=",">
                 (#{item.component_ref,jdbcType=VARCHAR},#{item.component_name,jdbcType=VARCHAR},#{item.component_config_str,jdbcType=VARCHAR},
-                #{item.component_type,jdbcType=VARCHAR},#{item.page_block_ref,jdbcType=VARCHAR},#{item.layout_ref,jdbcType=VARCHAR},#{item.page_id,jdbcType=INTEGER},#{item.type,jdbcType=VARCHAR})
+                #{item.component_id,jdbcType=VARCHAR},#{item.page_block_ref,jdbcType=VARCHAR},#{item.layout_ref,jdbcType=VARCHAR},#{item.page_id,jdbcType=INTEGER},#{item.type,jdbcType=VARCHAR})
             </foreach>;
         </if>
 

@@ -5,18 +5,18 @@
 <mapper namespace='page_component'>
     <!--插入数据
     <insert id="insert" parameterType="java.util.HashMap">
-        INSERT INTO page_component_custom(component_type,component_name,component_config,component_code) VALUES
-        (#{component_type,jdbcType=VARCHAR},#{component_name,jdbcType=VARCHAR},#{component_config,jdbcType=BLOB},
+        INSERT INTO page_component_custom(component_id,component_name,component_config,component_code) VALUES
+        (#{component_id,jdbcType=VARCHAR},#{component_name,jdbcType=VARCHAR},#{component_config,jdbcType=BLOB},
         #{component_code,jdbcType=BLOB});
     </insert>
     -->
 
     <!--插入数据（简化）-->
     <insert id="add" parameterType="java.util.HashMap">
-        INSERT INTO page_component(component_type,type,component_name,component_time,component_photo,component_user,
+        INSERT INTO page_component(component_id,type,component_name,component_time,component_photo,component_user,
                                    component_code,component_config_str,component_visualize_str,
                                    blue_script_node_config_str,blue_script_in_out_config_str,blue_script_visualize_config_str,blue_script_logic_config_str) VALUES
-        (#{component_type,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{component_name,jdbcType=VARCHAR},NOW(),#{component_photo,jdbcType=BLOB},#{component_user,jdbcType=VARCHAR},
+        (#{component_id,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{component_name,jdbcType=VARCHAR},NOW(),#{component_photo,jdbcType=BLOB},#{component_user,jdbcType=VARCHAR},
          #{component_code,jdbcType=BLOB},#{component_config_str,jdbcType=BLOB},#{component_visualize_str,jdbcType=BLOB},
          #{blue_script_node_config_str,jdbcType=BLOB},#{blue_script_in_out_config_str,jdbcType=BLOB},#{blue_script_visualize_config_str,jdbcType=BLOB},#{blue_script_logic_config_str,jdbcType=BLOB});
     </insert>
@@ -27,12 +27,12 @@
     </delete>
     <!-- 更新组件属性 -->
     <update id="update" parameterType="java.util.HashMap">
-        UPDATE page_component SET component_type=#{component_type,jdbcType=VARCHAR},type=#{type,jdbcType=VARCHAR},component_name=#{component_name,jdbcType=VARCHAR},component_photo=#{component_photo,jdbcType=BLOB} WHERE id=#{id,jdbcType=INTEGER};
+        UPDATE page_component SET component_id=#{component_id,jdbcType=VARCHAR},type=#{type,jdbcType=VARCHAR},component_name=#{component_name,jdbcType=VARCHAR},component_photo=#{component_photo,jdbcType=BLOB} WHERE id=#{id,jdbcType=INTEGER};
     </update>
 
     <!-- 更新组件代码与配置 -->
     <update id="updateComponentConfigAndCode" parameterType="java.util.HashMap">
-        UPDATE page_component SET component_code=#{component_code,jdbcType=BLOB},component_config_str=#{component_config_str,jdbcType=BLOB},component_visualize_str=#{component_visualize_str,jdbcType=BLOB}  WHERE component_type=#{component_type,jdbcType=VARCHAR};
+        UPDATE page_component SET component_code=#{component_code,jdbcType=BLOB},component_config_str=#{component_config_str,jdbcType=BLOB},component_visualize_str=#{component_visualize_str,jdbcType=BLOB}  WHERE component_id=#{component_id,jdbcType=VARCHAR};
     </update>
 
     <!-- 更新组件蓝图配置 -->
@@ -40,30 +40,30 @@
         UPDATE page_component SET blue_script_node_config_str=#{blue_script_node_config_str,jdbcType=BLOB},
                                   blue_script_in_out_config_str=#{blue_script_in_out_config_str,jdbcType=BLOB},
                                   blue_script_visualize_config_str=#{blue_script_visualize_config_str,jdbcType=BLOB}
-        WHERE component_type=#{component_type,jdbcType=VARCHAR};
+        WHERE component_id=#{component_id,jdbcType=VARCHAR};
     </update>
     <!-- 更新组件蓝图配置 -->
     <update id="updateBlueScriptLogic" parameterType="java.util.HashMap">
         UPDATE page_component SET blue_script_logic_config_str=#{blue_script_logic_config_str,jdbcType=BLOB}
-        WHERE component_type=#{component_type,jdbcType=VARCHAR};
+        WHERE component_id=#{component_id,jdbcType=VARCHAR};
     </update>
 
 
     <!-- 查找数据 -->
     <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select id,component_type,type,component_name,component_config_str,component_code,component_visualize_str,
+        select id,component_id,type,component_name,component_config_str,component_code,component_visualize_str,
                blue_script_in_out_config_str,blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str
         from page_component where 1=1
-        <if test="component_type!=null and component_type!=''">
-            and component_type=#{component_type, jdbcType=VARCHAR}
+        <if test="component_id!=null and component_id!=''">
+            and component_id=#{component_id, jdbcType=VARCHAR}
         </if>
         order by component_time desc
     </select>
     <!-- 查找component-photo -->
     <select id="findPhoto" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select id,component_type,type,component_name,component_config_str,component_code,component_photo,component_user from page_component where 1=1
-        <if test="component_type!=null and component_type!=''">
-            and component_type=#{component_type, jdbcType=VARCHAR}
+        select id,component_id,type,component_name,component_config_str,component_code,component_photo,component_user from page_component where 1=1
+        <if test="component_id!=null and component_id!=''">
+            and component_id=#{component_id, jdbcType=VARCHAR}
         </if>
     </select>
 
@@ -71,7 +71,7 @@
     <!-- 更新蓝图逻辑 -->
     <update id="updateBlueScriptLogicConfig" parameterType="java.util.HashMap">
         UPDATE page_component SET blue_script_logic_config_str=#{blue_script_logic_config_str,jdbcType=BLOB}
-        WHERE component_type=#{component_type,jdbcType=VARCHAR};
+        WHERE component_id=#{component_id,jdbcType=VARCHAR};
     </update>
 
 </mapper>

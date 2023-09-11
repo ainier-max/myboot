@@ -5,12 +5,12 @@
 <mapper namespace='page_component_tree'>
     <!-- 查询组件树 -->
     <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT id,name,pid,component_type FROM page_component_tree
+        SELECT id,name,pid,component_id FROM page_component_tree
     </select>
 
     <!-- 增加树菜单 -->
     <insert id="insert" parameterType="java.util.HashMap" >
-        INSERT INTO page_component_tree(name,pid,component_type) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{component_type,jdbcType=VARCHAR})
+        INSERT INTO page_component_tree(name,pid,component_id) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{component_id,jdbcType=VARCHAR})
     </insert>
 
     <!-- 更新树菜单 -->

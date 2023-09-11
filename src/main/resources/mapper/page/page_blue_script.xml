@@ -18,8 +18,8 @@
         select t.blue_script_ref,t.component_ref,t.blue_script_type,t.type,t.config_str,t.zbx,t.zby,t.page_id,t.name,
                t1.blue_script_in_out_config_str,t1.blue_script_node_config_str,t1.blue_script_logic_config_str,t1.blue_script_visualize_config_str
         from page_blue_script t left join(
-            select component_type as blue_script_type,blue_script_in_out_config_str, blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str
-            from page_component where component_type in(select blue_script_type from page_blue_script where page_id=#{page_id, jdbcType=INTEGER})
+            select component_id as blue_script_type,blue_script_in_out_config_str, blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str
+            from page_component where component_id in(select blue_script_type from page_blue_script where page_id=#{page_id, jdbcType=INTEGER})
             UNION all
             select blue_script_type as blue_script_type,blue_script_in_out_config_str, blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str
             from page_blue_script_tools where blue_script_type in(select blue_script_type from page_blue_script where page_id=#{page_id, jdbcType=INTEGER})
