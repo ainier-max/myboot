@@ -5,12 +5,12 @@
 <mapper namespace='page_blue_script_tools_tree'>
     <!-- 查询组件树 -->
     <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT id,name,pid,blue_script_type FROM page_blue_script_tools_tree
+        SELECT id,name,pid,blue_script_id FROM page_blue_script_tools_tree
     </select>
 
     <!-- 增加树菜单 -->
     <insert id="insert" parameterType="java.util.HashMap" >
-        INSERT INTO page_blue_script_tools_tree(name,pid,blue_script_type) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{blue_script_type,jdbcType=VARCHAR})
+        INSERT INTO page_blue_script_tools_tree(name,pid,blue_script_id) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{blue_script_id,jdbcType=VARCHAR})
     </insert>
 
     <!-- 更新树菜单 -->

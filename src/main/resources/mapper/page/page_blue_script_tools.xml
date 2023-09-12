@@ -6,31 +6,31 @@
 
     <!--插入数据（简化）-->
     <insert id="insert" parameterType="java.util.HashMap">
-        INSERT INTO page_blue_script_tools(blue_script_name,blue_script_type,blue_script_time,blue_script_user,
+        INSERT INTO page_blue_script_tools(blue_script_name,blue_script_id,blue_script_time,blue_script_user,
                                            blue_script_node_config_str,blue_script_in_out_config_str,blue_script_visualize_config_str,blue_script_logic_config_str) VALUES
-        (#{blue_script_name,jdbcType=VARCHAR},#{blue_script_type,jdbcType=VARCHAR},NOW(),#{component_user,jdbcType=VARCHAR},
+        (#{blue_script_name,jdbcType=VARCHAR},#{blue_script_id,jdbcType=VARCHAR},NOW(),#{component_user,jdbcType=VARCHAR},
          #{blue_script_node_config_str,jdbcType=BLOB},#{blue_script_in_out_config_str,jdbcType=BLOB},#{blue_script_visualize_config_str,jdbcType=BLOB},#{blue_script_logic_config_str,jdbcType=BLOB});
     </insert>
 
 
     <!-- 查找数据 -->
     <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select id,blue_script_name,blue_script_type,type,blue_script_time,blue_script_in_out_config_str,blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str,blue_script_user  from page_blue_script_tools where 1=1
-        <if test="blue_script_type!=null and blue_script_type!=''">
-            and blue_script_type=#{blue_script_type, jdbcType=VARCHAR}
+        select id,blue_script_name,blue_script_id,type,blue_script_time,blue_script_in_out_config_str,blue_script_node_config_str,blue_script_logic_config_str,blue_script_visualize_config_str,blue_script_user  from page_blue_script_tools where 1=1
+        <if test="blue_script_id!=null and blue_script_id!=''">
+            and blue_script_id=#{blue_script_id, jdbcType=VARCHAR}
         </if>
         order by blue_script_time desc
     </select>
 
     <!-- 更新组件属性 -->
     <update id="update" parameterType="java.util.HashMap">
-        UPDATE page_blue_script_tools SET blue_script_name=#{blue_script_name,jdbcType=VARCHAR},blue_script_type=#{blue_script_type,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=VARCHAR};
+        UPDATE page_blue_script_tools SET blue_script_name=#{blue_script_name,jdbcType=VARCHAR},blue_script_id=#{blue_script_id,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=VARCHAR};
     </update>
 
     <!-- 删除数据 -->
     <delete id="delete" parameterType="java.util.HashMap">
-        DELETE FROM page_blue_script_tools WHERE blue_script_type=#{blue_script_type,jdbcType=INTEGER};
-        DELETE FROM page_blue_script_tools_tree WHERE blue_script_type=#{blue_script_type,jdbcType=INTEGER};
+        DELETE FROM page_blue_script_tools WHERE blue_script_id=#{blue_script_id,jdbcType=INTEGER};
+        DELETE FROM page_blue_script_tools_tree WHERE blue_script_id=#{blue_script_id,jdbcType=INTEGER};
 
     </delete>
 
@@ -39,14 +39,14 @@
         UPDATE page_blue_script_tools SET blue_script_node_config_str=#{blue_script_node_config_str,jdbcType=BLOB},
                                           blue_script_in_out_config_str=#{blue_script_in_out_config_str,jdbcType=BLOB},
                                           blue_script_visualize_config_str=#{blue_script_visualize_config_str,jdbcType=BLOB}
-        WHERE blue_script_type=#{blue_script_type,jdbcType=VARCHAR};
+        WHERE blue_script_id=#{blue_script_id,jdbcType=VARCHAR};
     </update>
 
 
     <!-- 更新蓝图逻辑 -->
     <update id="updateBlueScriptLogicConfig" parameterType="java.util.HashMap">
         UPDATE page_blue_script_tools SET blue_script_logic_config_str=#{blue_script_logic_config_str,jdbcType=BLOB}
-        WHERE blue_script_type=#{blue_script_type,jdbcType=VARCHAR};
+        WHERE blue_script_id=#{blue_script_id,jdbcType=VARCHAR};
     </update>
 
 
