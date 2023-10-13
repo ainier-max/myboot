@@ -38,9 +38,12 @@ public class PageComponentPackumdUpload {
                     map.put("component_umdjs", file.getBytes());
                 }
                 if(i==1){
-                    map.put("component_project", file.getBytes());
+                    map.put("component_mjs", file.getBytes());
                 }
                 if(i==2){
+                    map.put("component_project", file.getBytes());
+                }
+                if(i==3){
                     map.put("component_photo", file.getBytes());
                 }
             }
@@ -58,9 +61,9 @@ public class PageComponentPackumdUpload {
             return returnList;
         }
     }
-    /*http://127.0.0.1:8087/cbc/GetPageComponentPackumd.cbc?component_id=EchartMap*/
-    @GetMapping("/cbc/GetPageComponentPackumd.cbc")
-    public void getFile(@RequestParam("component_id") String component_id,  HttpServletRequest request, HttpServletResponse response) {
+    /*http://10.11.0.87:8087/cbc/GetPageComponentPackumdjs.cbc?component_id=EchartMap*/
+    @GetMapping("/cbc/GetPageComponentPackumdjs.cbc")
+    public void getUmdjsFile(@RequestParam("component_id") String component_id,  HttpServletRequest request, HttpServletResponse response) {
         System.out.println("----------Start(Author:陈斌才)----------");
         System.out.println("执行findFile操作!");
         System.out.println("请求文件的component_id值：" + component_id);
@@ -71,7 +74,7 @@ public class PageComponentPackumdUpload {
             Map map =new HashMap();
             map.put("component_id",component_id);
             sqlSession=sqlSessionFactory.openSession();
-            List<Map<String, Object>> list=sqlSession.selectList("page_component_packumd.findUmd", map);
+            List<Map<String, Object>> list=sqlSession.selectList("page_component_packumd.findUmdjs", map);
             System.out.println(list);
             if(list.size()>0){
                 response.setHeader("Content-Type", "application/json");
@@ -90,6 +93,41 @@ public class PageComponentPackumdUpload {
             System.out.println("----------End(Author:陈斌才)----------");
         }
     }
+
+    /*http://10.11.0.87:8087/cbc/GetPageComponentPackmjs.cbc?component_id=EchartMap*/
+    @GetMapping("/cbc/GetPageComponentPackmjs.cbc")
+    public void getMjsFile(@RequestParam("component_id") String component_id,  HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("----------Start(Author:陈斌才)----------");
+        System.out.println("执行findFile操作!");
+        System.out.println("请求文件的component_id值：" + component_id);
+        SqlSession sqlSession=null;
+        OutputStream outputStream = null;
+
+        try {
+            Map map =new HashMap();
+            map.put("component_id",component_id);
+            sqlSession=sqlSessionFactory.openSession();
+            List<Map<String, Object>> list=sqlSession.selectList("page_component_packumd.findMjs", map);
+            System.out.println(list);
+            if(list.size()>0){
+                response.setHeader("Content-Type", "application/javascript");
+                byte[] data =(byte[])list.get(0).get("component_mjs");
+                outputStream = response.getOutputStream();
+                outputStream.write(data);
+                outputStream.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+                sqlSession = null;
+            }
+            System.out.println("----------End(Author:陈斌才)----------");
+        }
+    }
+
+
 
     @PostMapping("/cbc/DeletePageComponentPackumd.cbc")
     public List<Object> deleteFile(@RequestBody String param, HttpServletRequest request,
