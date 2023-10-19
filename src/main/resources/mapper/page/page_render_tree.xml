@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='page_render_tree'>
+    <!-- 查询组件树 -->
+    <select id="findAllPageRenderTreeByPageID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id from page_render_tree t where t.page_id=#{page_id,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+
+
+</mapper>
