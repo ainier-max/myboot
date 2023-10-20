@@ -5,7 +5,18 @@
 <mapper namespace='page_render_tree'>
     <!-- 查询组件树 -->
     <select id="findAllPageRenderTreeByPageID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id from page_render_tree t where t.page_id=#{page_id,jdbcType=VARCHAR}
+        SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id,t.config_str from page_render_tree t where t.page_id=#{page_id,jdbcType=VARCHAR}
+    </select>
+
+
+    <!-- 查询组件树 -->
+    <select id="updatePageRenderTreeByID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        UPDATE page_render_tree
+        SET name=#{name,jdbcType=VARCHAR},config_str=#{config_str,jdbcType=BLOB}
+        where id=#{id,jdbcType=VARCHAR};
+        UPDATE page_centre
+        SET page_name=#{name,jdbcType=VARCHAR}
+        where page_id=#{page_id,jdbcType=VARCHAR};
     </select>
 
 

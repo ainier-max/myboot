@@ -20,16 +20,11 @@
         <!-- 子查询定义变量 -->
         select @myid := (select max(page_id)+1 from page_centre);
 
-        INSERT INTO page_block(page_id,page_block_name,page_block_type,page_block_ref,page_block_config_str,page_block_blue_script_config_str) VALUES
-        (@myid,#{page_name,jdbcType=VARCHAR},#{page_block_type,jdbcType=VARCHAR},#{page_block_ref,jdbcType=VARCHAR},
-        #{page_block_config_str,jdbcType=VARCHAR},#{page_block_blue_script_config_str,jdbcType=VARCHAR});
-
-        INSERT INTO page_render_tree(page_id,name,ref,type) VALUES
-        (@myid,#{page_name,jdbcType=VARCHAR},#{page_block_ref,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR});
+        INSERT INTO page_render_tree(page_id,name,ref,type,config_str) VALUES
+        (@myid,#{page_name,jdbcType=VARCHAR},#{page_block_ref,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{config_str,jdbcType=BLOB});
 
         INSERT INTO page_centre(page_id,page_name,page_tree_id,page_img) VALUES
         (@myid,#{page_name,jdbcType=VARCHAR},#{page_tree_id,jdbcType=VARCHAR},#{page_img,jdbcType=VARCHAR});
-
 
     </insert>
 
@@ -45,9 +40,7 @@
     <!-- 删除数据 -->
     <delete id="delete" parameterType="java.util.HashMap">
         DELETE FROM page_centre WHERE page_id=#{page_id,jdbcType=INTEGER};
-        DELETE FROM page_block_tree WHERE page_id=#{page_id,jdbcType=INTEGER};
-        DELETE FROM page_block_layout WHERE page_id=#{page_id,jdbcType=INTEGER};
-        DELETE FROM page_block_component WHERE page_id=#{page_id,jdbcType=INTEGER};
+        DELETE FROM page_render_tree WHERE page_id=#{page_id,jdbcType=INTEGER};
     </delete>
 
 </mapper>
