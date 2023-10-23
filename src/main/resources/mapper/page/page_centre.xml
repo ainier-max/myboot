@@ -20,8 +20,8 @@
         <!-- 子查询定义变量 -->
         select @myid := (select max(page_id)+1 from page_centre);
 
-        INSERT INTO page_render_tree(page_id,name,ref,type,config_str) VALUES
-        (@myid,#{page_name,jdbcType=VARCHAR},#{page_block_ref,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{config_str,jdbcType=BLOB});
+        INSERT INTO page_render_tree(page_id,id,name,ref,type,config_str) VALUES
+        (@myid,#{id,jdbcType=VARCHAR},#{page_name,jdbcType=VARCHAR},#{page_block_ref,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{config_str,jdbcType=BLOB});
 
         INSERT INTO page_centre(page_id,page_name,page_tree_id,page_img) VALUES
         (@myid,#{page_name,jdbcType=VARCHAR},#{page_tree_id,jdbcType=VARCHAR},#{page_img,jdbcType=VARCHAR});

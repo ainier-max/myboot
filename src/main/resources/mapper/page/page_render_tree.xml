@@ -3,13 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace='page_render_tree'>
-    <!-- 查询组件树 -->
+    <!-- 查询页面渲染树 -->
     <select id="findAllPageRenderTreeByPageID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
         SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id,t.config_str from page_render_tree t where t.page_id=#{page_id,jdbcType=VARCHAR}
     </select>
 
 
-    <!-- 查询组件树 -->
+    <!-- 更新树节点 -->
     <select id="updatePageRenderTreeByID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
         UPDATE page_render_tree
         SET name=#{name,jdbcType=VARCHAR},config_str=#{config_str,jdbcType=BLOB}
@@ -17,6 +17,29 @@
         UPDATE page_centre
         SET page_name=#{name,jdbcType=VARCHAR}
         where page_id=#{page_id,jdbcType=VARCHAR};
+    </select>
+
+    <!-- 保存页面渲染树 -->
+    <select id="savePageRenderTree" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+
+        /*1.变量定义*/
+        select @nowDate:=now();
+
+        <!--保存备份到page_render_tree_back-->
+        insert into page_render_tree_back(id,pid,name,ref,type,page_id,config_str,back_time,back_ms)
+        select id,pid,name,ref,type,page_id,config_str,@nowDate as back_time,'保存备份' as back_ms from page_render_tree where page_id=#{page_id,jdbcType=INTEGER};
+        <!--根据page_id删除渲染树数据-->
+        delete from page_render_tree where page_id=#{page_id,jdbcType=VARCHAR};
+        <!--加入新的渲染树数据-->
+        <if test="pageRenderTreeData.size() > 0">
+            insert into page_render_tree (id,pid,name,ref,type,page_id,config_str) values
+            <foreach collection="pageRenderTreeData" item="item" separator=",">
+                (#{item.id,jdbcType=VARCHAR},#{item.pid,jdbcType=VARCHAR},#{item.name,jdbcType=VARCHAR},
+                #{item.ref,jdbcType=VARCHAR},#{item.type,jdbcType=VARCHAR},#{item.page_id,jdbcType=VARCHAR},
+                 #{item.config_str,jdbcType=BLOB})
+            </foreach>;
+        </if>
+
     </select>
 
 
