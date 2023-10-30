@@ -2,24 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace='page_component_packumd'>
+<mapper namespace='page_component_pack'>
 
     <insert id="insert" parameterType="java.util.HashMap">
-        insert into page_component_packumd(uuid,type,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str) VALUES
+        insert into page_component_pack(uuid,type,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str) VALUES
             (#{uuid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{component_name,jdbcType=VARCHAR},#{component_id,jdbcType=VARCHAR},
              #{component_umdjs,jdbcType=BLOB},#{component_mjs,jdbcType=BLOB},#{component_project,jdbcType=BLOB},#{component_photo,jdbcType=BLOB},#{component_config_str,jdbcType=BLOB});
     </insert>
 
     <!-- 查找某采集任务表的图片字段 -->
     <select id="findUmdjs" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT component_umdjs FROM page_component_packumd t where 1=1
+        SELECT component_umdjs FROM page_component_pack t where 1=1
         <if test="component_id!=null and component_id!=''">
             and t.component_id=#{component_id, jdbcType=VARCHAR}
         </if>
     </select>
 
     <select id="findMjs" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT component_mjs FROM page_component_packumd t where 1=1
+        SELECT component_mjs FROM page_component_pack t where 1=1
         <if test="component_id!=null and component_id!=''">
             and t.component_id=#{component_id, jdbcType=VARCHAR}
         </if>
@@ -28,7 +28,7 @@
 
     <!-- 查找某采集任务表的图片字段 -->
     <select id="findComponentConfig" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT component_config_str FROM page_component_packumd t where 1=1
+        SELECT component_config_str FROM page_component_pack t where 1=1
         <if test="component_id!=null and component_id!=''">
             and t.component_id=#{component_id, jdbcType=VARCHAR}
         </if>
