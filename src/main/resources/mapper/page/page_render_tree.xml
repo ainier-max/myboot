@@ -5,7 +5,9 @@
 <mapper namespace='page_render_tree'>
     <!-- 查询页面渲染树 -->
     <select id="findAllPageRenderTreeByPageID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id,t.config_str,t.related_value from page_render_tree t where t.page_id=#{page_id,jdbcType=VARCHAR}
+        SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id,t.config_str,t.related_value,t2.component_code
+        from page_render_tree t left join page_component_frontend t2 on t.related_value = t2.component_id
+        where t.page_id=#{page_id,jdbcType=VARCHAR}
     </select>
 
 
