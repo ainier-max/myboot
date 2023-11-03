@@ -41,6 +41,7 @@
     <delete id="delete" parameterType="java.util.HashMap">
         DELETE FROM page_centre WHERE page_id=#{page_id,jdbcType=INTEGER};
         DELETE FROM page_render_tree WHERE page_id=#{page_id,jdbcType=INTEGER};
+        DELETE FROM page_centre_relative WHERE page_id=#{page_id,jdbcType=INTEGER};
     </delete>
 
 </mapper>
