@@ -11,10 +11,11 @@
     </select>
     <!-- 查询关联页面渲染树 -->
     <select id="findRalativePageRenderTreeByPageID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+
         SELECT t.id,t.name,t.pid,t.ref,t.type,t.page_id,t.config_str,t.related_value,t2.component_code
         from page_render_tree t left join page_component_frontend t2 on t.related_value = t2.component_id
         where t.page_id in(
-            select relative_page_id  from page_centre_relative pcr  where pcr.page_id=#{page_id,jdbcType=VARCHAR}
+            select page_id  from page_render_tree where id in (select related_value from page_render_tree where page_id = #{page_id,jdbcType=VARCHAR} and type='pageOut')
         )
 
     </select>
@@ -24,9 +25,6 @@
         (#{page_id,jdbcType=VARCHAR},,#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},
          #{ref,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{config_str,jdbcType=BLOB});
     </insert>
-
-
-
 
     <!-- 更新树节点 -->
     <select id="updatePageRenderTreeByID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">

@@ -15,6 +15,23 @@
 
     </select>
 
+    <select id="findPageIsRelatived" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select t2.page_id ,t2.page_name  from page_centre t2 where t2.page_id in(
+            select t1.page_id  from page_render_tree t1 where t1.related_value in(
+                select t.id from page_render_tree t where t.page_id=#{page_id,jdbcType=INTEGER}
+            ) and t1.type='pageOut'
+        )
+    </select>
+
+
+
+    <!-- 查询页面树
+    <select id="findPageByMainBlock" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT t.page_id,prt.id,prt.name,prt.ref FROM page_centre t left join page_render_tree prt  on t.page_id = prt.page_id
+        where 1=1 and t.page_tree_id=#{page_tree_id,jdbcType=INTEGER} and prt.type="mainBlock"
+    </select>
+     -->
+
 
     <insert id="insert" parameterType="java.util.HashMap">
         <!-- 子查询定义变量 -->
