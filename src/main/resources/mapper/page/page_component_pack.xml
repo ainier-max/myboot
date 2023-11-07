@@ -3,6 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace='page_component_pack'>
+    <!-- 查询组件树 -->
+    <select id="findAll" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select uuid,type,component_id ,component_name ,component_project  from  page_component_pack
+    </select>
 
     <insert id="insert" parameterType="java.util.HashMap">
         insert into page_component_pack(uuid,type,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str) VALUES
@@ -24,6 +28,15 @@
             and t.component_id=#{component_id, jdbcType=VARCHAR}
         </if>
     </select>
+
+    <select id="findProject" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        SELECT component_project FROM page_component_pack t where 1=1
+        <if test="component_id!=null and component_id!=''">
+            and t.component_id=#{component_id, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
 
 
     <!-- 查找某采集任务表的图片字段 -->
