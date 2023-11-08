@@ -5,7 +5,10 @@
 <mapper namespace='page_component_pack'>
     <!-- 查询组件树 -->
     <select id="findAll" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select uuid,type,component_id ,component_name   from  page_component_pack
+        select uuid,type,component_id ,component_name,component_config_str   from  page_component_pack where 1=1
+        <if test="component_id!=null and component_id!=''">
+            and component_id=#{component_id, jdbcType=VARCHAR}
+        </if>
     </select>
 
     <insert id="insert" parameterType="java.util.HashMap">
@@ -13,6 +16,12 @@
             (#{uuid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},NOW(),#{component_name,jdbcType=VARCHAR},#{component_id,jdbcType=VARCHAR},
              #{component_umdjs,jdbcType=BLOB},#{component_mjs,jdbcType=BLOB},#{component_project,jdbcType=BLOB},#{component_photo,jdbcType=BLOB},#{component_config_str,jdbcType=BLOB});
     </insert>
+
+    <!-- 删除数据 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        DELETE FROM page_component_pack WHERE component_id=#{component_id,jdbcType=VARCHAR};
+        DELETE FROM page_component_pack_tree  WHERE component_id=#{component_id,jdbcType=VARCHAR};
+    </delete>
 
     <!-- 查找某采集任务表的图片字段 -->
     <select id="findUmdjs" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
