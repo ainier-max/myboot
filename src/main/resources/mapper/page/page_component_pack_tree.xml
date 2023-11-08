@@ -10,7 +10,7 @@
 
     <!-- 增加树菜单 -->
     <insert id="insert" parameterType="java.util.HashMap" >
-        INSERT INTO page_component_pack_tree(name,pid,component_id) VALUES(#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{component_id,jdbcType=VARCHAR})
+        INSERT INTO page_component_pack_tree(id,name,pid,component_id) VALUES(#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER},#{component_id,jdbcType=VARCHAR})
     </insert>
 
     <!-- 更新树菜单 -->

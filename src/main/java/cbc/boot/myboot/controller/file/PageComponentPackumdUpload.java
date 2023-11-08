@@ -17,7 +17,7 @@ public class PageComponentPackumdUpload {
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
 
-    @PostMapping("/cbc/PageComponentPackumdUpload.cbc")
+    @PostMapping("/cbc/PageComponentPackUpload.cbc")
     public List<Object> uploadFile(@RequestParam("param") String param, @RequestParam("file") List<MultipartFile> files, HttpServletRequest request) {
         System.out.println("----------Start(Author:陈斌才)----------");
         System.out.println("执行upload操作!");

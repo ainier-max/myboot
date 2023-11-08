@@ -5,12 +5,12 @@
 <mapper namespace='page_component_pack'>
     <!-- 查询组件树 -->
     <select id="findAll" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select uuid,type,component_id ,component_name ,component_project  from  page_component_pack
+        select uuid,type,component_id ,component_name   from  page_component_pack
     </select>
 
     <insert id="insert" parameterType="java.util.HashMap">
-        insert into page_component_pack(uuid,type,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str) VALUES
-            (#{uuid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{component_name,jdbcType=VARCHAR},#{component_id,jdbcType=VARCHAR},
+        insert into page_component_pack(uuid,type,upload_time,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str) VALUES
+            (#{uuid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},NOW(),#{component_name,jdbcType=VARCHAR},#{component_id,jdbcType=VARCHAR},
              #{component_umdjs,jdbcType=BLOB},#{component_mjs,jdbcType=BLOB},#{component_project,jdbcType=BLOB},#{component_photo,jdbcType=BLOB},#{component_config_str,jdbcType=BLOB});
     </insert>
 
