@@ -26,6 +26,20 @@
 	</properties>
 
 	<dependencies>
+		<!--支持xml文件热更新功能
+		<dependency>
+			<groupId>io.github.wayn111</groupId>
+			<artifactId>mybatis-xmlreload-spring-boot-starter</artifactId>
+			<version>2.0.1.m1</version>
+		</dependency>
+		-->
+
+		<!--工具-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
 		<!--spring-boot-starter-web自动配置模块(获取可执行的 Web 应用)-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

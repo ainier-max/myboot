@@ -15,7 +15,6 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dynamicDataSource"></property>
 	</bean>
-
 	<!-- DBCP数据库连接池
 	<bean id="dataSource1" class="org.apache.commons.dbcp.BasicDataSource"
 		  destroy-method="close">
@@ -94,6 +93,7 @@
 				<value>classpath:/mapper/gather/*.xml</value>
 				<value>classpath:/mapper/screen/*.xml</value>
 				<value>classpath:/mapper/page/*.xml</value>
+				<value>classpath:/mapper/lowcode/*.xml</value>
 			</array>
 		</property>
 	</bean>
