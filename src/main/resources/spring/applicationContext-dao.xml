@@ -80,6 +80,16 @@
 		<property name="testConnectionOnCheckout" value="${c3p0.testConnectionOnCheckout}" />
 	</bean>
 
+	<!-- 使用ehcache缓存 -->
+	<bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml"/>
+		<property name="shared" value="true"></property>
+	</bean>
+	<!-- 默认是cacheManager -->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="cacheManagerFactory"/>
+	</bean>
+
 
 	<!-- 配置sqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

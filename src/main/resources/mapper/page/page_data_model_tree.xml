@@ -5,10 +5,49 @@
 <mapper namespace='page_data_model_tree'>
     <!-- 查询组件树 -->
     <select id="find" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select id,name,pid,data_model_id from page_data_model_tree
+        select id,pid,name,name_space,data_model_id ,data_model_type ,data_model_sql ,data_model_param,is_cache from page_data_model_tree
+
+    </select>
+
+    <select id="findByPid" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select id,pid,name,name_space,data_model_id ,data_model_type ,data_model_sql ,is_cache,data_model_param  from page_data_model_tree where pid=#{pid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findByID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select id,pid,name,name_space,data_model_id ,data_model_type ,data_model_sql ,is_cache,data_model_param  from page_data_model_tree where id=#{id,jdbcType=VARCHAR}
     </select>
 
 
 
+    <insert id="addNameSpace" parameterType="java.util.HashMap">
+        INSERT INTO page_data_model_tree(id,pid,name,name_space,data_model_id) VALUES (
+                                                                            #{id,jdbcType=VARCHAR},
+                                                                            #{pid,jdbcType=VARCHAR},
+                                                                            #{name,jdbcType=VARCHAR},
+                                                                            #{name_space,jdbcType=VARCHAR},
+                                                                            #{data_model_id,jdbcType=VARCHAR}
+                                                                        )
+
+    </insert>
+
+
+    <update id="update" parameterType="java.util.HashMap">
+
+        UPDATE page_data_model_tree SET name=#{name,jdbcType=VARCHAR},data_model_id=#{data_model_id,jdbcType=VARCHAR},
+                                        data_model_type=#{data_model_type,jdbcType=VARCHAR},data_model_sql=#{data_model_sql,jdbcType=BLOB},
+                                        is_cache=#{is_cache,jdbcType=VARCHAR},data_model_param=#{data_model_param,jdbcType=BLOB}
+        WHERE id=#{id,jdbcType=VARCHAR};
+
+    </update>
+
+
+    <update id="updateNameSpace" parameterType="java.util.HashMap">
+        UPDATE page_data_model_tree SET name=#{name,jdbcType=VARCHAR} where id=#{id,jdbcType=VARCHAR};
+        UPDATE page_data_model_tree SET name_space=#{name_space,jdbcType=VARCHAR} WHERE name_space=#{old_name_space,jdbcType=VARCHAR};
+    </update>
+
+    <delete id="deleteByIDAndPID" parameterType="java.util.HashMap">
+        DELETE FROM page_data_model_tree where id=#{id,jdbcType=VARCHAR} or pid=#{id,jdbcType=VARCHAR}
+    </delete>
 
 </mapper>
