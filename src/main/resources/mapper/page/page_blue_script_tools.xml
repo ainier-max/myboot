@@ -6,9 +6,9 @@
 
     <!--插入数据（简化）-->
     <insert id="insert" parameterType="java.util.HashMap">
-        INSERT INTO page_blue_script_tools(blue_script_name,blue_script_id,blue_script_time,blue_script_user,
+        INSERT INTO page_blue_script_tools(type,blue_script_name,blue_script_id,blue_script_time,blue_script_user,
                                            blue_script_node_config_str,blue_script_in_out_config_str,blue_script_visualize_config_str,blue_script_logic_config_str) VALUES
-        (#{blue_script_name,jdbcType=VARCHAR},#{blue_script_id,jdbcType=VARCHAR},NOW(),#{component_user,jdbcType=VARCHAR},
+        ('blueScriptTool',#{blue_script_name,jdbcType=VARCHAR},#{blue_script_id,jdbcType=VARCHAR},NOW(),#{component_user,jdbcType=VARCHAR},
          #{blue_script_node_config_str,jdbcType=BLOB},#{blue_script_in_out_config_str,jdbcType=BLOB},#{blue_script_visualize_config_str,jdbcType=BLOB},#{blue_script_logic_config_str,jdbcType=BLOB});
     </insert>
 
