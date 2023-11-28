@@ -47,6 +47,8 @@
         select id,pid,name,ref,type,page_id,config_str,related_value,@nowDate as back_time,'保存备份' as back_ms from page_render_tree where page_id=#{page_id,jdbcType=INTEGER};
         <!--根据page_id删除渲染树数据-->
         delete from page_render_tree where page_id=#{page_id,jdbcType=VARCHAR};
+        <!--更新页面数据-->
+        update page_centre set page_name=#{page_name,jdbcType=VARCHAR} where page_id=#{page_id,jdbcType=VARCHAR};
         <!--加入新的渲染树数据-->
         <if test="pageRenderTreeData.size() > 0">
             insert into page_render_tree (id,pid,name,ref,type,page_id,config_str,related_value) values
