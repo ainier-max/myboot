@@ -26,6 +26,15 @@
         ) t1 on t.blue_script_id=t1.blue_script_id where page_id=#{page_id, jdbcType=INTEGER}
     </select>
 
+    <select id="findRalativeBlueScriptByPageID" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
+        select blue_script_ref,related_ref,blue_script_id,type,config_str,page_id,blue_script_name from page_blue_script t
+        where t.page_id in(
+            select page_id  from page_render_tree where id in (select related_value from page_render_tree where page_id = #{page_id,jdbcType=VARCHAR} and type='pageOut')
+        )
+
+    </select>
+
+
 
     <insert id="saveAllPageBlueScript" parameterType="java.util.HashMap">
         /*更新蓝图位置大小配置*/
