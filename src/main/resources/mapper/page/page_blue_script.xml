@@ -58,4 +58,23 @@
     </insert>
 
 
+    <update id="onlyUpdatePageBlueScript" parameterType="java.util.HashMap">
+        /*1.变量定义*/
+        select @nowDate:=now();
+        <!--保存备份到page_blue_script_back-->
+        insert into page_blue_script_back(blue_script_ref,related_ref,page_id,blue_script_id,type,config_str,blue_script_name,back_time,back_ms)
+        select blue_script_ref,related_ref,page_id ,blue_script_id,type,config_str,blue_script_name,@nowDate as back_time,'保存备份' as back_ms from page_blue_script where page_id=#{page_id,jdbcType=INTEGER};
+        <!--根据page_id删除page_blue_script中的组件-->
+        delete from page_blue_script where page_id=#{page_id,jdbcType=INTEGER};
+        <!--加入新的page_blue_script组件-->
+        <if test="blueScriptData != null and blueScriptData.size()>0">
+            insert into page_blue_script (blue_script_ref,related_ref,page_id,blue_script_id,type,config_str,blue_script_name) values
+            <foreach collection="blueScriptData" item="item" separator=",">
+                (#{item.blue_script_ref,jdbcType=VARCHAR},#{item.related_ref,jdbcType=VARCHAR},
+                #{item.page_id,jdbcType=INTEGER},#{item.blue_script_id,jdbcType=VARCHAR},#{item.type,jdbcType=VARCHAR},#{item.config_str,jdbcType=VARCHAR},#{item.blue_script_name,jdbcType=VARCHAR})
+            </foreach>;
+        </if>
+    </update>
+
+
 </mapper>
