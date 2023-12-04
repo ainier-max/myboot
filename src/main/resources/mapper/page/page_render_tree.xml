@@ -59,6 +59,10 @@
             </foreach>;
         </if>
 
+        <!--更新关联的所有块的名称数据-->
+        update page_render_tree set name=#{page_name,jdbcType=VARCHAR} where ref=#{topPageBlockRef,jdbcType=VARCHAR}
+
+
     </select>
 
 
