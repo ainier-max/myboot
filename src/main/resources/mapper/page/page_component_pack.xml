@@ -5,16 +5,20 @@
 <mapper namespace='page_component_pack'>
     <!-- 查询组件树 -->
     <select id="findAll" parameterType="java.util.HashMap" resultType="java.util.HashMap" useCache="false">
-        select uuid,type,component_id ,component_name,component_config_str   from  page_component_pack where 1=1
+        select uuid,type,component_id ,component_name,component_config_str,
+               blue_script_node_config_str,blue_script_in_out_config_str,blue_script_visualize_config_str,blue_script_logic_config_str
+        from  page_component_pack where 1=1
         <if test="component_id!=null and component_id!=''">
             and component_id=#{component_id, jdbcType=VARCHAR}
         </if>
     </select>
 
     <insert id="insert" parameterType="java.util.HashMap">
-        insert into page_component_pack(uuid,type,upload_time,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str) VALUES
+        insert into page_component_pack(uuid,type,upload_time,component_name,component_id,component_umdjs,component_mjs,component_project,component_photo,component_config_str,
+                                        blue_script_node_config_str,blue_script_in_out_config_str,blue_script_visualize_config_str,blue_script_logic_config_str) VALUES
             (#{uuid,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},NOW(),#{component_name,jdbcType=VARCHAR},#{component_id,jdbcType=VARCHAR},
-             #{component_umdjs,jdbcType=BLOB},#{component_mjs,jdbcType=BLOB},#{component_project,jdbcType=BLOB},#{component_photo,jdbcType=BLOB},#{component_config_str,jdbcType=BLOB});
+             #{component_umdjs,jdbcType=BLOB},#{component_mjs,jdbcType=BLOB},#{component_project,jdbcType=BLOB},#{component_photo,jdbcType=BLOB},#{component_config_str,jdbcType=BLOB}
+                ,#{blue_script_node_config_str,jdbcType=BLOB},#{blue_script_in_out_config_str,jdbcType=BLOB},#{blue_script_visualize_config_str,jdbcType=BLOB},#{blue_script_logic_config_str,jdbcType=BLOB});
     </insert>
 
     <!-- 删除数据 -->
@@ -55,6 +59,20 @@
             and t.component_id=#{component_id, jdbcType=VARCHAR}
         </if>
     </select>
+
+    <!-- 删除数据 -->
+    <update id="updateBlueScriptConfig" parameterType="java.util.HashMap">
+        UPDATE page_component_pack SET blue_script_node_config_str=#{blue_script_node_config_str,jdbcType=BLOB},
+                                           blue_script_in_out_config_str=#{blue_script_in_out_config_str,jdbcType=BLOB},
+                                           blue_script_visualize_config_str=#{blue_script_visualize_config_str,jdbcType=BLOB}
+        WHERE component_id=#{component_id,jdbcType=VARCHAR};
+    </update>
+
+    <!-- 更新蓝图逻辑 -->
+    <update id="updateBlueScriptLogicConfig" parameterType="java.util.HashMap">
+        UPDATE page_component_pack SET blue_script_logic_config_str=#{blue_script_logic_config_str,jdbcType=BLOB}
+        WHERE component_id=#{component_id,jdbcType=VARCHAR};
+    </update>
 
 
 
