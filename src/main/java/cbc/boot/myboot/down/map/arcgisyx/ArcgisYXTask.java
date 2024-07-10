@@ -36,22 +36,40 @@ class ArcgisYXTask implements Runnable {
         //Arcgis影像地图瓦片下载路径
         String link = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
         //爬取地图级别
-        for (int z = 10; z < 15; z++) {
+        for (int z = 5; z < 18; z++) {
             //int z = 12;  //层级
             //double xmax_jw=118.20;
             //double xmin_jw=118.06;
             //double ymax_jw=24.56;
             //double ymin_jw=24.42;
+            //118.03073125352506
+            //north
+            //:
+            //24.566393462737455
+            //south
+            //:
+            //24.559289735109576
+            //west
+            //:
+            //118.02286867915468
+
             //爬取地图范围
-            double xmax_jw = 118.31122935456039;
-            double xmin_jw = 118.07143998013917;
-            double ymax_jw = 24.5634935737506;
-            double ymin_jw = 24.25357021412386;
+            double xmax_jw = 118.03073125352506;
+            double xmin_jw = 118.02286867915468;
+            double ymax_jw = 24.576393462737455;
+            double ymin_jw = 24.559289735109576;
             LatLngToTileUtil latLngToTileUtil = new LatLngToTileUtil();
             int xmin = latLngToTileUtil.minxtotile(xmin_jw, z);
             int xmax = latLngToTileUtil.maxxtotile(xmax_jw, z);
             int ymin = latLngToTileUtil.minytotile(ymax_jw, z);
             int ymax = latLngToTileUtil.maxytotile(ymin_jw, z);
+
+            int temp=0;
+            if(ymin>ymax){
+                temp=ymin;
+                ymin=ymax;
+                ymax=temp;
+            }
             System.out.println("x:" + xmin + "-" + xmax);
             System.out.println("y:" + ymin + "-" + ymax);
             //创建线程池,corePoolSize两条线程,最大存在四条线程,大于corePoolSize小于MaxmumPoolSize的线程等待空闲时间为500毫秒,任务队列LinkBlockingQueue不写时的默认值为Integer默认值.
