@@ -34,35 +34,29 @@ class ArcgisYXTask implements Runnable {
     public static void main(String[] args)
             throws Exception {
         //Arcgis影像地图瓦片下载路径
-        String link = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+        String link = "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=AAPTxy8BH1VEsoebNVZXo8HurEOF051kAEKlhkOhBEc9BmTRbx8gaNqtBYKRq3vEnwSKnwUE1aRn2Siyo0gHWzzPwpJd-ZUeTyDgQZPqW8C6pXNLOE3bRO6-Jz3NFmp-qNquqGBQTATcCHbNsL-h9CPyMMPGsTcUvzPlIInazMfkWJNbFmqJeSzPj_1DHshXa0XCfkQn5mVxlF2dFt10Mq2bGo0HkpdpXwNQdoGwdphsLoU.AT1_CpQKgEim";
+
         //爬取地图级别
-        for (int z = 5; z < 18; z++) {
-            //int z = 12;  //层级
-            //double xmax_jw=118.20;
-            //double xmin_jw=118.06;
-            //double ymax_jw=24.56;
-            //double ymin_jw=24.42;
-            //118.03073125352506
-            //north
-            //:
-            //24.566393462737455
-            //south
-            //:
-            //24.559289735109576
-            //west
-            //:
-            //118.02286867915468
+        for (int z = 4; z < 5; z++) {
 
             //爬取地图范围
-            double xmax_jw = 118.03073125352506;
-            double xmin_jw = 118.02286867915468;
-            double ymax_jw = 24.576393462737455;
-            double ymin_jw = 24.559289735109576;
+            double xmax_jw = 179.9;
+            double xmin_jw = -179.9;
+            double ymax_jw = 89.9;
+            double ymin_jw = -89.9;
             LatLngToTileUtil latLngToTileUtil = new LatLngToTileUtil();
             int xmin = latLngToTileUtil.minxtotile(xmin_jw, z);
             int xmax = latLngToTileUtil.maxxtotile(xmax_jw, z);
             int ymin = latLngToTileUtil.minytotile(ymax_jw, z);
             int ymax = latLngToTileUtil.maxytotile(ymin_jw, z);
+
+            //56622
+
+
+//            int xmin = 112864;
+//            int xmax = 113331;
+//            int ymin = 45886;
+//            int ymax = 46372;
 
             int temp=0;
             if(ymin>ymax){
