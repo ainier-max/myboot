@@ -34,10 +34,13 @@ class ArcgisYXTask implements Runnable {
     public static void main(String[] args)
             throws Exception {
         //Arcgis影像地图瓦片下载路径
-        String link = "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=AAPTxy8BH1VEsoebNVZXo8HurEOF051kAEKlhkOhBEc9BmTRbx8gaNqtBYKRq3vEnwSKnwUE1aRn2Siyo0gHWzzPwpJd-ZUeTyDgQZPqW8C6pXNLOE3bRO6-Jz3NFmp-qNquqGBQTATcCHbNsL-h9CPyMMPGsTcUvzPlIInazMfkWJNbFmqJeSzPj_1DHshXa0XCfkQn5mVxlF2dFt10Mq2bGo0HkpdpXwNQdoGwdphsLoU.AT1_CpQKgEim";
+        //String link = "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=AAPTxy8BH1VEsoebNVZXo8HurEOF051kAEKlhkOhBEc9BmTRbx8gaNqtBYKRq3vEnwSKnwUE1aRn2Siyo0gHWzzPwpJd-ZUeTyDgQZPqW8C6pXNLOE3bRO6-Jz3NFmp-qNquqGBQTATcCHbNsL-h9CPyMMPGsTcUvzPlIInazMfkWJNbFmqJeSzPj_1DHshXa0XCfkQn5mVxlF2dFt10Mq2bGo0HkpdpXwNQdoGwdphsLoU.AT1_CpQKgEim";
+
+        String link = "https://khms0.google.com/kh/v=997?x={x}&y={y}&z={z}";
+
 
         //爬取地图级别
-        for (int z = 4; z < 5; z++) {
+        for (int z = 0; z < 5; z++) {
 
             //爬取地图范围
             double xmax_jw = 179.9;
@@ -92,11 +95,11 @@ class ArcgisYXTask implements Runnable {
             conn.setConnectTimeout(10000);
             conn.connect();
             InputStream in = conn.getInputStream();
-            File dir = new File("d:/gcj/tiles/" + z + "/" + i);
+            File dir = new File("d:/gcj6/tiles/" + z + "/" + i);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            File file = new File("d:/gcj/tiles/" + z + "/" + i + "/" + j + ".png");
+            File file = new File("d:/gcj6/tiles/" + z + "/" + i + "/" + j + ".png");
             if (!file.exists()) {
                 file.createNewFile();
             }
